@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -10,8 +12,9 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f8f9fa;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   color: #2d3436;
+  overflow-x: hidden;
 }
 
 html {
@@ -20,33 +23,170 @@ html {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: linear-gradient(180deg, #f1f1f1 0%, #e0e0e0 100%);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ff6b6b;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #ff6b6b 0%, #ff5252 100%);
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff5252;
+  background: linear-gradient(180deg, #ff5252 0%, #ff3333 100%);
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
 }
 
-/* Button styles */
+/* Reusable Components */
 .btn {
   @apply px-4 py-2 rounded-lg font-semibold transition-all duration-300 cursor-pointer;
 }
 
 .btn-primary {
-  @apply bg-primary text-white hover:bg-red-500;
+  @apply bg-gradient-to-r from-primary to-pink-500 text-white hover:shadow-glow transform hover:scale-105;
 }
 
 .btn-secondary {
-  @apply bg-secondary text-white hover:bg-teal-500;
+  @apply bg-gradient-to-r from-secondary to-cyan-500 text-white hover:shadow-neon transform hover:scale-105;
+}
+
+.btn-outline {
+  @apply border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all;
+}
+
+.card {
+  @apply bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.card:hover {
+  @apply shadow-xl;
+  transform: translateY(-5px);
+}
+
+.badge {
+  @apply inline-block px-3 py-1 rounded-full font-semibold text-sm;
+}
+
+.badge-primary {
+  @apply bg-gradient-to-r from-primary to-pink-500 text-white;
+}
+
+.badge-success {
+  @apply bg-gradient-to-r from-green-400 to-green-600 text-white;
+}
+
+.badge-warning {
+  @apply bg-gradient-to-r from-yellow-400 to-orange-500 text-white;
+}
+
+/* Hero Gradient Animations */
+.hero-section {
+  @apply relative overflow-hidden;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+/* Floating Animation */
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Glow Effects */
+.glow-text {
+  text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+}
+
+.glow-box {
+  @apply shadow-glow;
+}
+
+/* Glass Morphism Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(45, 52, 54, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Shimmer Loading Effect */
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 0%, #f9f9f9 50%, #f0f0f0 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Interactive Elements */
+.interactive-hover {
+  @apply transition-all duration-300 hover:scale-110 cursor-pointer;
+}
+
+.interactive-hover:active {
+  @apply scale-95;
+}
+
+/* Product Grid */
+.product-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+}
+
+/* Smooth Transitions */
+.smooth-transition {
+  @apply transition-all duration-300 ease-out;
+}
+
+/* Button with Icon */
+.icon-btn {
+  @apply flex items-center gap-2 transition-all duration-300;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #ff6b6b, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Form Inputs */
+input, select, textarea {
+  @apply rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
+}
+
+input:focus, select:focus, textarea:focus {
+  @apply shadow-glow;
+}
+
+/* Text Utilities */
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations on scroll */
+.fade-in {
+  @apply opacity-0 translate-y-4;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .btn-outline {

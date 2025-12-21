@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaSearch, FaSpinner } from 'react-icons/fa';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
-import { Product, productService } from '../services/productService';
+import { Product } from '../services/productService';
 
 const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -104,6 +104,7 @@ const ProductsPage: React.FC = () => {
     },
   ];
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     // Simulate API call
     setLoading(true);
