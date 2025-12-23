@@ -26,7 +26,6 @@ async def create_order(
             detail="Order must have at least one item"
         )
     
-    # Validate products and calculate total
     total_amount = 0
     order_items_data = []
     
@@ -50,7 +49,6 @@ async def create_order(
         })
         total_amount += product.price * item.quantity
     
-    # Create order
     new_order = Order(
         user_id=current_user.id,
         total_amount=total_amount,
@@ -62,7 +60,6 @@ async def create_order(
     db.add(new_order)
     db.flush()
     
-    # Create order items and update stock
     for item_data in order_items_data:
         order_item = OrderItem(
             order_id=new_order.id,
@@ -71,14 +68,11 @@ async def create_order(
             price_at_time=item_data["price"]
         )
         db.add(order_item)
-        
-        # Decrease stock
         item_data["product"].quantity -= item_data["quantity"]
     
     db.commit()
     db.refresh(new_order)
     
-    # Build response
     items = []
     for item in new_order.items:
         product = db.query(DBProduct).filter(DBProduct.id == item.product_id).first()
@@ -157,7 +151,6 @@ async def get_order(
             detail="Order not found"
         )
     
-    # Check ownership (unless admin)
     if order.user_id != current_user.id and current_user.role != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -204,7 +197,6 @@ async def cancel_order(
             detail="Order not found"
         )
     
-    # Check ownership (unless admin)
     if order.user_id != current_user.id and current_user.role != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -217,7 +209,6 @@ async def cancel_order(
             detail=f"Cannot cancel order with status '{order.status}'"
         )
     
-    # Restore stock
     for item in order.items:
         product = db.query(DBProduct).filter(DBProduct.id == item.product_id).first()
         if product:

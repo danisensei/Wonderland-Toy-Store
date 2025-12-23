@@ -11,13 +11,10 @@ export interface Product {
   image: string;
   in_stock?: boolean;
   categoryAttributes?: {
-    // For Electronic
     batteryType?: string;
     voltage?: string;
-    // For Plush
     material?: string;
     size?: string;
-    // For BoardGame
     ageRange?: string;
     numberOfPlayers?: string;
   };
@@ -44,9 +41,6 @@ export interface CreateProductData {
 }
 
 export const productService = {
-  /**
-   * Get all products with optional filtering
-   */
   getAllProducts: async (filters?: ProductFilters): Promise<Product[]> => {
     try {
       let url = '/products';
@@ -71,9 +65,6 @@ export const productService = {
     }
   },
 
-  /**
-   * Get product by ID
-   */
   getProductById: async (id: string): Promise<Product> => {
     try {
       const response = await apiClient.get(`/products/${id}`);
@@ -84,9 +75,6 @@ export const productService = {
     }
   },
 
-  /**
-   * Get products by category
-   */
   getProductsByCategory: async (category: string): Promise<Product[]> => {
     try {
       const response = await apiClient.get(`/products?category=${category}`);
@@ -97,9 +85,6 @@ export const productService = {
     }
   },
 
-  /**
-   * Search products
-   */
   searchProducts: async (query: string): Promise<Product[]> => {
     try {
       const response = await apiClient.get(`/products/search?q=${encodeURIComponent(query)}`);
@@ -110,9 +95,6 @@ export const productService = {
     }
   },
 
-  /**
-   * Create a new product (admin only)
-   */
   createProduct: async (productData: CreateProductData): Promise<Product> => {
     try {
       const response = await apiClient.post('/products', productData);
@@ -123,9 +105,6 @@ export const productService = {
     }
   },
 
-  /**
-   * Update a product (admin only)
-   */
   updateProduct: async (id: string, productData: Partial<CreateProductData>): Promise<Product> => {
     try {
       const response = await apiClient.put(`/products/${id}`, productData);
@@ -136,9 +115,6 @@ export const productService = {
     }
   },
 
-  /**
-   * Delete a product (admin only)
-   */
   deleteProduct: async (id: string): Promise<void> => {
     try {
       await apiClient.delete(`/products/${id}`);

@@ -18,16 +18,13 @@ load_dotenv()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan events."""
-    # Startup: Create database tables
     print("🏪 Starting Wonderland Toy Store API...")
     Base.metadata.create_all(bind=engine)
     print("✅ Database tables created")
     yield
-    # Shutdown
     print("👋 Shutting down Wonderland Toy Store API...")
 
 
-# Create FastAPI app
 app = FastAPI(
     title="Wonderland Toy Store API",
     description="Backend API for the Wonderland Toy Store e-commerce platform",

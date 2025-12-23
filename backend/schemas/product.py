@@ -1,33 +1,19 @@
 """
-Product schemas.
+Product Pydantic schemas.
 """
-from pydantic import BaseModel, field_validator
-from typing import Optional, Dict, Any, Literal
+from pydantic import BaseModel
+from typing import Optional, Dict, Any
 
 
 class ProductCreate(BaseModel):
     name: str
     brand: str
     price: float
-    quantity: int
-    description: str
-    category: Literal['Electronic', 'Plush', 'BoardGame']
-    image: str
-    categoryAttributes: Optional[Dict[str, Any]] = None
-
-    @field_validator('price')
-    @classmethod
-    def price_must_be_positive(cls, v):
-        if v <= 0:
-            raise ValueError('Price must be positive')
-        return v
-
-    @field_validator('quantity')
-    @classmethod
-    def quantity_must_be_non_negative(cls, v):
-        if v < 0:
-            raise ValueError('Quantity cannot be negative')
-        return v
+    quantity: int = 0
+    description: Optional[str] = ""
+    category: str  # Electronic, Plush, BoardGame
+    image: Optional[str] = ""
+    categoryAttributes: Optional[Dict[str, Any]] = {}
 
 
 class ProductUpdate(BaseModel):
@@ -36,7 +22,7 @@ class ProductUpdate(BaseModel):
     price: Optional[float] = None
     quantity: Optional[int] = None
     description: Optional[str] = None
-    category: Optional[Literal['Electronic', 'Plush', 'BoardGame']] = None
+    category: Optional[str] = None
     image: Optional[str] = None
     categoryAttributes: Optional[Dict[str, Any]] = None
 
@@ -50,10 +36,7 @@ class ProductResponse(BaseModel):
     description: str
     category: str
     image: str
-    in_stock: bool
-    categoryAttributes: Optional[Dict[str, Any]] = None
+    in_stock: bool = True
+    categoryAttributes: Optional[Dict[str, Any]] = {}
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
-
-    class Config:
-        from_attributes = True

@@ -4,7 +4,6 @@ Authentication routes.
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from datetime import timedelta
 
 from utils.deps import get_db, get_current_user
 from utils.security import hash_password, verify_password, create_access_token
@@ -18,7 +17,6 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 @router.post("/register")
 async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     """Register a new user."""
-    # Check if user exists
     existing_user = db.query(User).filter(User.email == user_data.email).first()
     if existing_user:
         raise HTTPException(
@@ -26,7 +24,6 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
             detail="Email already registered"
         )
     
-    # Create new user
     hashed_pw = hash_password(user_data.password)
     new_user = User(
         email=user_data.email,
@@ -38,7 +35,6 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     
-    # Create token
     access_token = create_access_token(data={"sub": str(new_user.id)})
     
     return {

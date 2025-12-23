@@ -159,7 +159,6 @@ async def update_product(
             detail="Product not found"
         )
     
-    # Update fields if provided
     update_data = product_data.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         if key == "categoryAttributes":

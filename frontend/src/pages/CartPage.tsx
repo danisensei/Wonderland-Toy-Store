@@ -33,7 +33,6 @@ const CartPage: React.FC = () => {
       return;
     }
 
-    // Validate checkout data
     if (!checkoutData.deliveryAddress || !checkoutData.city) {
       setError('Please fill in the delivery address and city');
       return;
@@ -48,7 +47,6 @@ const CartPage: React.FC = () => {
     setError(null);
 
     try {
-      // Create order via API
       await orderService.createOrder({
         items: items.map(item => ({
           productId: item.id,
@@ -61,7 +59,6 @@ const CartPage: React.FC = () => {
 
       setOrderPlaced(true);
 
-      // Clear cart and redirect after delay
       setTimeout(() => {
         clearCart();
         setOrderPlaced(false);
@@ -95,7 +92,6 @@ const CartPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-light py-12">
       <div className="container mx-auto px-4">
-        {/* Header */}
         <Link
           to="/products"
           className="flex items-center gap-2 text-primary font-semibold mb-8 hover:gap-3 transition"
@@ -118,11 +114,9 @@ const CartPage: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {items.map((item) => (
                 <div key={item.id} className="card flex gap-4">
-                  {/* Product Image */}
                   <div className="w-24 h-24 bg-light rounded-lg overflow-hidden flex-shrink-0">
                     <img
                       src={item.image}
@@ -131,7 +125,6 @@ const CartPage: React.FC = () => {
                     />
                   </div>
 
-                  {/* Product Details */}
                   <div className="flex-1">
                     <h3 className="font-bold text-lg">{item.name}</h3>
                     <p className="text-gray-600 text-sm mb-2">
@@ -142,13 +135,10 @@ const CartPage: React.FC = () => {
                     </p>
                   </div>
 
-                  {/* Quantity & Price */}
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         className="px-3 py-1 border border-gray-300 rounded hover:bg-light transition"
                       >
                         −
@@ -157,9 +147,7 @@ const CartPage: React.FC = () => {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         className="px-3 py-1 border border-gray-300 rounded hover:bg-light transition"
                       >
                         +
@@ -184,7 +172,6 @@ const CartPage: React.FC = () => {
               ))}
             </div>
 
-            {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="card sticky top-8">
                 <h2 className="text-2xl font-bold mb-6">Order Summary</h2>

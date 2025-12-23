@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FaBox,
@@ -20,6 +20,7 @@ import {
 import { useAuthStore } from '../context/authStore';
 import { useProductStore } from '../context/productStore';
 import { Product } from '../services/productService';
+import apiClient from '../services/apiClient';
 
 interface AdminOrder {
   id: string;
@@ -33,7 +34,7 @@ interface AdminOrder {
     price: number;
   }>;
   totalAmount: number;
-  status: 'Pending' | 'Confirmed' | 'Shipped' | 'Delivered' | 'Cancelled';
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   createdAt: string;
   deliveryAddress: string;
 }
@@ -59,6 +60,8 @@ const AdminDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState<'all' | 'Electronic' | 'Plush' | 'BoardGame'>('all');
   const [filterOrderStatus, setFilterOrderStatus] = useState<'all' | 'Pending' | 'Confirmed' | 'Shipped' | 'Delivered' | 'Cancelled'>('all');
+  const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
+  const [showOrderModal, setShowOrderModal] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -66,56 +69,74 @@ const AdminDashboard: React.FC = () => {
   };
 
 
-  const [orders, setOrders] = useState<AdminOrder[]>([
-    {
-      id: '1',
-      orderNumber: 'ORD-20251223-00001',
-      userId: 'user1',
-      userName: 'Ali Khan',
-      items: [
-        { productId: '1', productName: 'Smart Robot', quantity: 1, price: 4999},
-        { productId: '2', productName: 'Cuddly Teddy Bear', quantity: 2, price: 2499 },
-      ],
-      totalAmount: 9997,
-      status: 'Pending',
-      createdAt: '2025-12-23',
-      deliveryAddress: '123 Main St, Karachi',
-    },
-    {
-      id: '2',
-      orderNumber: 'ORD-20251223-00002',
-      userId: 'user2',
-      userName: 'Fatima Ahmed',
-      items: [{ productId: '3', productName: 'Chess Set', quantity: 1, price: 3499 }],
-      totalAmount: 3499,
-      status: 'Confirmed',
-      createdAt: '2025-12-22',
-      deliveryAddress: '456 Defense Rd, Lahore',
-    },
-  ]);
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [usersLoading, setUsersLoading] = useState(false);
 
-  const [users] = useState<AdminUser[]>([
-    {
-      id: '1',
-      name: 'Ali Khan',
-      email: 'ali@example.com',
-      phone: '03001234567',
-      address: '123 Main St, Karachi',
-      totalOrders: 5,
-      totalSpent: 25000,
-      joinedDate: '2025-01-15',
-    },
-    {
-      id: '2',
-      name: 'Fatima Ahmed',
-      email: 'fatima@example.com',
-      phone: '03119876543',
-      address: '456 Defense Rd, Lahore',
-      totalOrders: 3,
-      totalSpent: 15000,
-      joinedDate: '2025-02-20',
-    },
-  ]);
+  // Fetch orders from API
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setOrdersLoading(true);
+      try {
+        const response = await apiClient.get('/admin/orders');
+        const apiOrders = response.data.map((order: any) => ({
+          id: order.id,
+          orderNumber: order.orderNumber,
+          userId: order.userId,
+          userName: order.userName || 'Unknown Customer',
+          items: order.items.map((item: any) => ({
+            productId: item.productId,
+            productName: item.name || 'Unknown Product',
+            quantity: item.quantity,
+            price: item.price,
+          })),
+          totalAmount: order.totalAmount,
+          status: order.status as AdminOrder['status'],
+          createdAt: new Date(order.createdAt).toLocaleDateString(),
+          deliveryAddress: order.deliveryAddress || '',
+        }));
+        setOrders(apiOrders);
+      } catch (error) {
+        console.error('Failed to fetch orders:', error);
+      } finally {
+        setOrdersLoading(false);
+      }
+    };
+
+    if (activeTab === 'orders' || activeTab === 'dashboard') {
+      fetchOrders();
+    }
+  }, [activeTab]);
+
+  // Fetch users from API
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setUsersLoading(true);
+      try {
+        const response = await apiClient.get('/admin/users');
+        const apiUsers = response.data.map((user: any) => ({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          phone: '-',
+          address: '-',
+          totalOrders: 0,
+          totalSpent: 0,
+          joinedDate: user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-',
+        }));
+        setUsers(apiUsers);
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+      } finally {
+        setUsersLoading(false);
+      }
+    };
+
+    if (activeTab === 'users' || activeTab === 'dashboard') {
+      fetchUsers();
+    }
+  }, [activeTab]);
 
   // Calculate dashboard stats
   const dashboardStats = {
@@ -149,10 +170,16 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleUpdateOrderStatus = (orderId: string, newStatus: AdminOrder['status']) => {
-    setOrders(
-      orders.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
-    );
+  const handleUpdateOrderStatus = async (orderId: string, newStatus: AdminOrder['status']) => {
+    try {
+      await apiClient.put(`/admin/orders/${orderId}/status?new_status=${newStatus}`);
+      setOrders(
+        orders.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
+      );
+    } catch (error) {
+      console.error('Failed to update order status:', error);
+      alert('Failed to update order status. Please try again.');
+    }
   };
 
   // Filter products
@@ -204,41 +231,37 @@ const AdminDashboard: React.FC = () => {
         <div className="container mx-auto px-6 flex gap-8">
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`py-4 px-2 font-semibold border-b-4 transition ${
-              activeTab === 'dashboard'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
+            className={`py-4 px-2 font-semibold border-b-4 transition ${activeTab === 'dashboard'
+              ? 'border-blue-600 text-blue-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
           >
             <FaChartBar className="inline mr-2" /> Dashboard
           </button>
           <button
             onClick={() => setActiveTab('products')}
-            className={`py-4 px-2 font-semibold border-b-4 transition ${
-              activeTab === 'products'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
+            className={`py-4 px-2 font-semibold border-b-4 transition ${activeTab === 'products'
+              ? 'border-blue-600 text-blue-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
           >
             <FaBox className="inline mr-2" /> Products ({products.length})
           </button>
           <button
             onClick={() => setActiveTab('orders')}
-            className={`py-4 px-2 font-semibold border-b-4 transition ${
-              activeTab === 'orders'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
+            className={`py-4 px-2 font-semibold border-b-4 transition ${activeTab === 'orders'
+              ? 'border-blue-600 text-blue-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
           >
             <FaShoppingBag className="inline mr-2" /> Orders ({orders.length})
           </button>
           <button
             onClick={() => setActiveTab('users')}
-            className={`py-4 px-2 font-semibold border-b-4 transition ${
-              activeTab === 'users'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
+            className={`py-4 px-2 font-semibold border-b-4 transition ${activeTab === 'users'
+              ? 'border-blue-600 text-blue-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
           >
             <FaUsers className="inline mr-2" /> Users ({users.length})
           </button>
@@ -355,17 +378,16 @@ const AdminDashboard: React.FC = () => {
                         </td>
                         <td className="px-4 py-3">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              order.status === 'Pending'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : order.status === 'Confirmed'
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${order.status === 'Pending'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : order.status === 'Confirmed'
                                 ? 'bg-blue-100 text-blue-800'
                                 : order.status === 'Shipped'
-                                ? 'bg-purple-100 text-purple-800'
-                                : order.status === 'Delivered'
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800'
-                            }`}
+                                  ? 'bg-purple-100 text-purple-800'
+                                  : order.status === 'Delivered'
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-red-100 text-red-800'
+                              }`}
                           >
                             {order.status}
                           </span>
@@ -463,13 +485,12 @@ const AdminDashboard: React.FC = () => {
                         PKR {product.price.toLocaleString('en-PK')}
                       </span>
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          product.quantity > 10
-                            ? 'bg-green-100 text-green-800'
-                            : product.quantity > 0
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${product.quantity > 10
+                          ? 'bg-green-100 text-green-800'
+                          : product.quantity > 0
                             ? 'bg-yellow-100 text-yellow-800'
                             : 'bg-red-100 text-red-800'
-                        }`}
+                          }`}
                       >
                         Stock: {product.quantity}
                       </span>
@@ -587,30 +608,30 @@ const AdminDashboard: React.FC = () => {
                             onChange={(e) =>
                               handleUpdateOrderStatus(order.id, e.target.value as any)
                             }
-                            className={`px-3 py-1 rounded text-xs font-semibold border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                              order.status === 'Pending'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : order.status === 'Confirmed'
+                            className={`px-3 py-1 rounded text-xs font-semibold border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 ${order.status === 'pending'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : order.status === 'processing'
                                 ? 'bg-blue-100 text-blue-800'
-                                : order.status === 'Shipped'
-                                ? 'bg-purple-100 text-purple-800'
-                                : order.status === 'Delivered'
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800'
-                            }`}
+                                : order.status === 'shipped'
+                                  ? 'bg-purple-100 text-purple-800'
+                                  : order.status === 'delivered'
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-red-100 text-red-800'
+                              }`}
                           >
-                            <option value="Pending">Pending</option>
-                            <option value="Confirmed">Confirmed</option>
-                            <option value="Shipped">Shipped</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
                           </select>
                         </td>
                         <td className="px-6 py-4">
                           <button
-                            onClick={() =>
-                              alert(`Order Details:\n\nCustomer: ${order.userName}\nAddress: ${order.deliveryAddress}\n\nItems:\n${order.items.map((i) => `- ${i.productName} x${i.quantity}`).join('\n')}\n\nTotal: PKR ${order.totalAmount.toLocaleString('en-PK')}`)
-                            }
+                            onClick={() => {
+                              setSelectedOrder(order);
+                              setShowOrderModal(true);
+                            }}
                             className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-sm transition"
                           >
                             <FaEye /> View
@@ -622,6 +643,17 @@ const AdminDashboard: React.FC = () => {
                 </table>
               </div>
             </div>
+
+            {/* Order Details Modal */}
+            {showOrderModal && selectedOrder && (
+              <OrderDetailsModal
+                order={selectedOrder}
+                onClose={() => {
+                  setShowOrderModal(false);
+                  setSelectedOrder(null);
+                }}
+              />
+            )}
 
             {filteredOrders.length === 0 && (
               <div className="text-center py-12">
@@ -691,6 +723,114 @@ const AdminDashboard: React.FC = () => {
             )}
           </div>
         )}
+      </div>
+    </div>
+  );
+};
+
+// Order Details Modal Component
+const OrderDetailsModal: React.FC<{
+  order: AdminOrder;
+  onClose: () => void;
+}> = ({ order, onClose }) => {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b flex justify-between items-center bg-gray-50 rounded-t-lg">
+          <h2 className="text-xl font-bold text-gray-800">Order Details</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 transition"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="p-6 space-y-6">
+          {/* Header Info */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-gray-500">Order Number</p>
+              <p className="font-mono font-bold text-blue-600">{order.orderNumber}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Placed On</p>
+              <p className="font-medium text-gray-800">{order.createdAt}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Status</p>
+              <span className={`inline-block px-2 py-1 rounded text-xs font-semibold capitalize mt-1 ${order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                  order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                    order.status === 'shipped' ? 'bg-purple-100 text-purple-800' :
+                      order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                        'bg-red-100 text-red-800'
+                }`}>
+                {order.status}
+              </span>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Total Amount</p>
+              <p className="font-bold text-xl text-blue-600">PKR {order.totalAmount.toLocaleString('en-PK')}</p>
+            </div>
+          </div>
+
+          {/* Customer Info */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+              <FaUsers className="text-gray-500" /> Customer Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-gray-500 uppercase">Name</p>
+                <p className="font-medium text-gray-800">{order.userName}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 uppercase">Delivery Address</p>
+                <p className="font-medium text-gray-800">{order.deliveryAddress}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Order Items */}
+          <div>
+            <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+              <FaShoppingBag className="text-gray-500" /> Order Items
+            </h3>
+            <div className="border rounded-lg overflow-hidden">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-gray-600">Product</th>
+                    <th className="px-4 py-2 text-center text-gray-600">Qty</th>
+                    <th className="px-4 py-2 text-right text-gray-600">Price</th>
+                    <th className="px-4 py-2 text-right text-gray-600">Total</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {order.items.map((item, index) => (
+                    <tr key={index}>
+                      <td className="px-4 py-3 font-medium text-gray-800">{item.productName}</td>
+                      <td className="px-4 py-3 text-center text-gray-600">{item.quantity}</td>
+                      <td className="px-4 py-3 text-right text-gray-600">PKR {item.price.toLocaleString('en-PK')}</td>
+                      <td className="px-4 py-3 text-right font-semibold text-gray-800">
+                        PKR {(item.price * item.quantity).toLocaleString('en-PK')}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 border-t bg-gray-50 rounded-b-lg flex justify-end">
+          <button
+            onClick={onClose}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -31,7 +31,6 @@ async def update_profile(
 ):
     """Update current user profile."""
     if update_data.email:
-        # Check if email is already taken by another user
         existing = db.query(User).filter(
             User.email == update_data.email,
             User.id != current_user.id

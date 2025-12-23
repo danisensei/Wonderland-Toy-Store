@@ -30,9 +30,6 @@ export interface CreateOrderData {
 }
 
 export const orderService = {
-  /**
-   * Create a new order
-   */
   createOrder: async (orderData: CreateOrderData): Promise<Order> => {
     try {
       const response = await apiClient.post('/orders', orderData);
@@ -43,9 +40,6 @@ export const orderService = {
     }
   },
 
-  /**
-   * Get current user's orders
-   */
   getUserOrders: async (): Promise<Order[]> => {
     try {
       const response = await apiClient.get('/orders/my-orders');
@@ -56,9 +50,6 @@ export const orderService = {
     }
   },
 
-  /**
-   * Get order by ID
-   */
   getOrderById: async (id: string): Promise<Order> => {
     try {
       const response = await apiClient.get(`/orders/${id}`);
@@ -69,9 +60,6 @@ export const orderService = {
     }
   },
 
-  /**
-   * Cancel an order
-   */
   cancelOrder: async (id: string): Promise<Order> => {
     try {
       const response = await apiClient.put(`/orders/${id}/cancel`);

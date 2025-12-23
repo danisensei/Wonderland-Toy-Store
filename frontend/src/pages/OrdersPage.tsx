@@ -11,7 +11,6 @@ const OrdersPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(null);
 
-  // Fetch orders from API
   useEffect(() => {
     const fetchOrders = async () => {
       if (!isAuthenticated) {
@@ -53,35 +52,23 @@ const OrdersPage: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending':
-        return <FaClock className="text-yellow-500" />;
-      case 'processing':
-        return <FaBox className="text-blue-500" />;
-      case 'shipped':
-        return <FaTruck className="text-orange-500" />;
-      case 'delivered':
-        return <FaCheckCircle className="text-green-500" />;
-      case 'cancelled':
-        return <FaTimesCircle className="text-red-500" />;
-      default:
-        return null;
+      case 'pending': return <FaClock className="text-yellow-500" />;
+      case 'processing': return <FaBox className="text-blue-500" />;
+      case 'shipped': return <FaTruck className="text-orange-500" />;
+      case 'delivered': return <FaCheckCircle className="text-green-500" />;
+      case 'cancelled': return <FaTimesCircle className="text-red-500" />;
+      default: return null;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'processing':
-        return 'bg-blue-100 text-blue-700';
-      case 'shipped':
-        return 'bg-orange-100 text-orange-700';
-      case 'delivered':
-        return 'bg-green-100 text-green-700';
-      case 'cancelled':
-        return 'bg-red-100 text-red-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
+      case 'pending': return 'bg-yellow-100 text-yellow-700';
+      case 'processing': return 'bg-blue-100 text-blue-700';
+      case 'shipped': return 'bg-orange-100 text-orange-700';
+      case 'delivered': return 'bg-green-100 text-green-700';
+      case 'cancelled': return 'bg-red-100 text-red-700';
+      default: return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -92,12 +79,8 @@ const OrdersPage: React.FC = () => {
           <div className="card text-center py-16 max-w-md mx-auto">
             <p className="text-4xl mb-4">🔐</p>
             <h2 className="text-2xl font-bold mb-4">Login Required</h2>
-            <p className="text-gray-600 mb-6">
-              Please login to view your orders.
-            </p>
-            <Link to="/login" className="btn btn-primary">
-              Login
-            </Link>
+            <p className="text-gray-600 mb-6">Please login to view your orders.</p>
+            <Link to="/login" className="btn btn-primary">Login</Link>
           </div>
         </div>
       </div>
@@ -109,7 +92,6 @@ const OrdersPage: React.FC = () => {
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold mb-8">My Orders</h1>
 
-        {/* Error State */}
         {error && (
           <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
             <div className="flex items-center gap-3 text-red-700">
@@ -122,7 +104,6 @@ const OrdersPage: React.FC = () => {
           </div>
         )}
 
-        {/* Loading State */}
         {loading ? (
           <div className="flex flex-col justify-center items-center h-64">
             <FaSpinner className="text-4xl text-primary animate-spin mb-4" />
@@ -132,18 +113,13 @@ const OrdersPage: React.FC = () => {
           <div className="card text-center py-16 max-w-md mx-auto">
             <p className="text-4xl mb-4">📦</p>
             <h2 className="text-2xl font-bold mb-4">No Orders Yet</h2>
-            <p className="text-gray-600 mb-6">
-              You haven't placed any orders yet. Start shopping!
-            </p>
-            <Link to="/products" className="btn btn-primary">
-              Shop Now
-            </Link>
+            <p className="text-gray-600 mb-6">You haven't placed any orders yet. Start shopping!</p>
+            <Link to="/products" className="btn btn-primary">Shop Now</Link>
           </div>
         ) : (
           <div className="space-y-6">
             {orders.map((order) => (
               <div key={order.id} className="card">
-                {/* Order Header */}
                 <div className="flex justify-between items-start mb-4 pb-4 border-b border-gray-200">
                   <div>
                     <h3 className="text-lg font-bold">{order.orderNumber}</h3>
@@ -157,7 +133,6 @@ const OrdersPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Order Items */}
                 <div className="mb-4">
                   <h4 className="font-semibold mb-3">Items:</h4>
                   <div className="space-y-2">
@@ -172,7 +147,6 @@ const OrdersPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Delivery Address */}
                 {order.deliveryAddress && (
                   <div className="mb-4 text-sm text-gray-600">
                     <span className="font-semibold">Delivery: </span>
@@ -182,7 +156,6 @@ const OrdersPage: React.FC = () => {
                   </div>
                 )}
 
-                {/* Order Total & Actions */}
                 <div className="flex justify-between items-center pt-4 border-t border-gray-200">
                   <div>
                     <span className="font-bold">Total: </span>
@@ -191,7 +164,6 @@ const OrdersPage: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* Cancel button for pending/processing orders */}
                   {(order.status === 'pending' || order.status === 'processing') && (
                     <button
                       onClick={() => handleCancelOrder(order.id)}

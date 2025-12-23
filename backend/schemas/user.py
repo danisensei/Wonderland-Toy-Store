@@ -1,5 +1,5 @@
 """
-User schemas.
+User Pydantic schemas.
 """
 from pydantic import BaseModel, EmailStr
 from typing import Optional
@@ -10,10 +10,7 @@ class UserResponse(BaseModel):
     email: str
     name: str
     role: str
-    createdAt: str
-
-    class Config:
-        from_attributes = True
+    createdAt: Optional[str] = None
 
 
 class UserUpdate(BaseModel):

@@ -8,13 +8,11 @@ from utils.security import hash_password
 
 def seed_database():
     """Seed the database with initial data."""
-    # Create tables
     Base.metadata.create_all(bind=engine)
     
     db = SessionLocal()
     
     try:
-        # Check if data already exists
         existing_users = db.query(User).count()
         if existing_users > 0:
             print("Database already seeded. Skipping...")
@@ -22,7 +20,6 @@ def seed_database():
         
         print("🌱 Seeding database...")
         
-        # Create admin user
         admin = User(
             email="admin@wonderland.com",
             name="Admin User",
@@ -31,7 +28,6 @@ def seed_database():
         )
         db.add(admin)
         
-        # Create demo customer
         demo_user = User(
             email="demo@example.com",
             name="Demo Customer",
@@ -40,7 +36,6 @@ def seed_database():
         )
         db.add(demo_user)
         
-        # Sample Electronic Toys
         electronic_toys = [
             DBProduct(
                 name="RC Racing Car",
@@ -74,7 +69,6 @@ def seed_database():
             ),
         ]
         
-        # Sample Plush Toys
         plush_toys = [
             DBProduct(
                 name="Giant Teddy Bear",
@@ -108,7 +102,6 @@ def seed_database():
             ),
         ]
         
-        # Sample Board Games
         board_games = [
             DBProduct(
                 name="Treasure Hunt Quest",
@@ -142,7 +135,6 @@ def seed_database():
             ),
         ]
         
-        # Add all products
         for product in electronic_toys + plush_toys + board_games:
             db.add(product)
         

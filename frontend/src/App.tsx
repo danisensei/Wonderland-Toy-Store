@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useAuthStore } from './context/authStore';
 
 // Layout
-import Navbar from './components/Navbar';
+import Header from './components/Header';
 import Footer from './components/Footer';
 
 // Pages
@@ -22,7 +22,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 const App: React.FC = () => {
   const { checkAuth } = useAuthStore();
 
-  // Check authentication status on app load
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -31,7 +30,7 @@ const App: React.FC = () => {
     <BrowserRouter>
       <div className="min-h-screen flex flex-col">
         <Routes>
-          {/* Admin routes - no navbar/footer */}
+          {/* Admin routes - no header/footer */}
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route
             path="/admin"
@@ -42,12 +41,12 @@ const App: React.FC = () => {
             }
           />
 
-          {/* Main routes with navbar/footer */}
+          {/* Main routes with header/footer */}
           <Route
             path="*"
             element={
               <>
-                <Navbar />
+                <Header />
                 <main className="flex-1">
                   <Routes>
                     <Route path="/" element={<HomePage />} />

@@ -41,16 +41,11 @@ export const useAuthStore = create<AuthStore>()(
         set({ token });
       },
 
-      // Customer login
       login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
           const response: LoginResponse = await authService.login({ email, password });
-
-          // Store token
           localStorage.setItem('authToken', response.access_token);
-
-          // Update state
           set({
             user: response.user,
             token: response.access_token,
@@ -68,16 +63,11 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      // Register new user
       register: async (email: string, name: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
           const response: LoginResponse = await authService.register({ email, name, password });
-
-          // Store token
           localStorage.setItem('authToken', response.access_token);
-
-          // Update state
           set({
             user: response.user,
             token: response.access_token,
@@ -95,21 +85,14 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      // Admin login (same API, just check role)
       adminLogin: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
           const response: LoginResponse = await authService.login({ email, password });
-
-          // Check if user is admin
           if (response.user.role !== 'admin') {
             throw new Error('Access denied. Admin privileges required.');
           }
-
-          // Store token
           localStorage.setItem('authToken', response.access_token);
-
-          // Update state
           set({
             user: response.user,
             token: response.access_token,
@@ -127,7 +110,6 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      // Logout
       logout: () => {
         localStorage.removeItem('authToken');
         set({
@@ -138,7 +120,6 @@ export const useAuthStore = create<AuthStore>()(
         });
       },
 
-      // Check auth status on app load
       checkAuth: async () => {
         const token = localStorage.getItem('authToken');
         if (!token) {
@@ -154,7 +135,6 @@ export const useAuthStore = create<AuthStore>()(
             token,
           });
         } catch (error) {
-          // Token is invalid or expired
           localStorage.removeItem('authToken');
           set({
             user: null,
@@ -164,12 +144,10 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      // Clear error
       clearError: () => {
         set({ error: null });
       },
 
-      // Check if current user is admin
       isAdmin: () => {
         const state = get();
         return state.user?.role === 'admin' && state.isAuthenticated;
@@ -186,5 +164,4 @@ export const useAuthStore = create<AuthStore>()(
   )
 );
 
-// Re-export User type for convenience
 export type { User };

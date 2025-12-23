@@ -44,6 +44,9 @@ async def get_all_orders(
     
     result = []
     for order in orders:
+        # Get user info
+        user = db.query(User).filter(User.id == order.user_id).first()
+        
         items = []
         for item in order.items:
             product = db.query(DBProduct).filter(DBProduct.id == item.product_id).first()
@@ -59,6 +62,8 @@ async def get_all_orders(
             id=str(order.id),
             orderNumber=order.order_number,
             userId=str(order.user_id),
+            userName=user.name if user else "Unknown Customer",
+            userEmail=user.email if user else "",
             items=items,
             totalAmount=order.total_amount,
             status=order.status,

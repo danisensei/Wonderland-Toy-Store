@@ -3,25 +3,38 @@ import { useSearchParams } from 'react-router-dom';
 import { FaSearch, FaSpinner, FaExclamationTriangle } from 'react-icons/fa';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
-import { Product } from '../services/productService';
-import { useProductStore } from '../context/productStore';
+import { Product, productService } from '../services/productService';
 
 const ProductsPage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const { products, isLoading, error, fetchProducts } = useProductStore();
+  const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     searchParams.get('category')
   );
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState('name');
 
-  // Fetch products on mount
   useEffect(() => {
-    fetchProducts().catch(console.error);
-  }, [fetchProducts]);
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await productService.getAllProducts();
+        setProducts(data);
+      } catch (err: any) {
+        console.error('Failed to fetch products:', err);
+        setError(err.message || 'Failed to load products. Please make sure the backend server is running.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Update category from URL params
+    fetchProducts();
+  }, []);
+
   useEffect(() => {
     const categoryParam = searchParams.get('category');
     if (categoryParam) {
@@ -29,16 +42,13 @@ const ProductsPage: React.FC = () => {
     }
   }, [searchParams]);
 
-  // Filter and sort products
   useEffect(() => {
     let filtered = [...products];
 
-    // Filter by category
     if (selectedCategory) {
       filtered = filtered.filter((p) => p.category === selectedCategory);
     }
 
-    // Filter by search
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -49,7 +59,6 @@ const ProductsPage: React.FC = () => {
       );
     }
 
-    // Sort
     switch (sortBy) {
       case 'price-asc':
         filtered.sort((a, b) => a.price - b.price);
@@ -68,7 +77,6 @@ const ProductsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-light py-12">
       <div className="container mx-auto px-4">
-        {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-bold mb-4">Shop Our Products</h1>
           <p className="text-gray-600 text-lg">
@@ -76,9 +84,7 @@ const ProductsPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Search & Sort */}
         <div className="mb-8 space-y-4">
-          {/* Search Bar */}
           <div className="relative">
             <FaSearch className="absolute left-4 top-3.5 text-gray-400" />
             <input
@@ -90,7 +96,6 @@ const ProductsPage: React.FC = () => {
             />
           </div>
 
-          {/* Sort Dropdown */}
           <div className="flex justify-between items-center">
             <span className="text-gray-600">
               Showing {filteredProducts.length} products
@@ -107,7 +112,6 @@ const ProductsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Error State */}
         {error && (
           <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
             <div className="flex items-center gap-3 text-red-700">
@@ -123,9 +127,7 @@ const ProductsPage: React.FC = () => {
           </div>
         )}
 
-        {/* Main Content */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Sidebar */}
           <aside className="md:col-span-1">
             <CategoryFilter
               selectedCategory={selectedCategory}
@@ -133,9 +135,8 @@ const ProductsPage: React.FC = () => {
             />
           </aside>
 
-          {/* Products Grid */}
           <main className="md:col-span-3">
-            {isLoading ? (
+            {loading ? (
               <div className="flex flex-col justify-center items-center h-96">
                 <FaSpinner className="text-4xl text-primary animate-spin mb-4" />
                 <p className="text-gray-600">Loading products...</p>
