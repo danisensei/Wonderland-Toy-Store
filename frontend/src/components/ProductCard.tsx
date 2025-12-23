@@ -91,6 +91,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
         )}
       </div>
 
+      <div className="flex flex-col flex-1 p-4">
         <h3 className="font-display font-bold text-lg mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
           {product.name}
         </h3>

@@ -22,7 +22,7 @@ const ProductsPage: React.FC = () => {
       quantity: 15,
       description: 'Advanced robot with AI learning capabilities',
       category: 'Electronic',
-      image: 'https://images.unsplash.com/photo-1550355291-bbee04a92027?w=300&h=300&fit=crop',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK1teoV9A4Ruk4aCQ7E4606n0_uYrdAEfgLQ&s',
       categoryAttributes: { batteryType: 'AA', voltage: '6V' },
     },
     {
@@ -33,7 +33,7 @@ const ProductsPage: React.FC = () => {
       quantity: 25,
       description: 'Ultra-soft plush teddy bear with embroidered details',
       category: 'Plush',
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop',
+      image: 'https://theflowerstudio.pk/wp-content/uploads/2017/02/high-quality-80cm-huge-teddy-bear-stuffed-plush-kids-toys-cute-wear-sweater-bear-baby-appearse.jpg_640x640.jpg',
       categoryAttributes: { material: 'Polyester', size: 'Medium' },
     },
     {
@@ -44,7 +44,7 @@ const ProductsPage: React.FC = () => {
       quantity: 10,
       description: 'Classic chess set with magnetic pieces',
       category: 'BoardGame',
-      image: 'https://images.unsplash.com/photo-1551088716-bba5ba7ce546?w=300&h=300&fit=crop',
+      image: 'https://m.media-amazon.com/images/I/81l0QFknYcL._AC_UF894,1000_QL80_.jpg',
       categoryAttributes: { ageRange: '8+', numberOfPlayers: '2' },
     },
     {
@@ -55,7 +55,7 @@ const ProductsPage: React.FC = () => {
       quantity: 8,
       description: 'Robot with LED lights and sound effects',
       category: 'Electronic',
-      image: 'https://images.unsplash.com/photo-1594787318286-3d835c1cab83?w=300&h=300&fit=crop',
+      image: 'https://5.imimg.com/data5/SELLER/Default/2025/4/504041787/ZO/ER/HB/223634207/o1cn01bssfiy1aclrom0pmf-946173350-0-cib-500x500.jpg',
       categoryAttributes: { batteryType: 'AAA', voltage: '4.5V' },
     },
     {
@@ -66,7 +66,7 @@ const ProductsPage: React.FC = () => {
       quantity: 30,
       description: 'Adorable plush bunny perfect for children',
       category: 'Plush',
-      image: 'https://images.unsplash.com/photo-1588196749597-9ff075ce5b51?w=300&h=300&fit=crop',
+      image: 'https://cuddlespk.com/cdn/shop/files/IMG_6057.jpg?v=1754898491&width=1445',
       categoryAttributes: { material: 'Cotton', size: 'Small' },
     },
     {
@@ -77,7 +77,7 @@ const ProductsPage: React.FC = () => {
       quantity: 12,
       description: 'Entertainment for the whole family',
       category: 'BoardGame',
-      image: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300&h=300&fit=crop',
+      image: 'https://thetoyfactory.pk/cdn/shop/files/Scrabble_Game_Board_with_Rack_and_Alphabet_Tiles_Close-Up_370x.jpg?v=1760967452%20370w',
       categoryAttributes: { ageRange: '6+', numberOfPlayers: '2-6' },
     },
     {
@@ -88,7 +88,7 @@ const ProductsPage: React.FC = () => {
       quantity: 5,
       description: 'Mini drone with HD camera and app control',
       category: 'Electronic',
-      image: 'https://images.unsplash.com/photo-1505228395891-9a51e7e86e81?w=300&h=300&fit=crop',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW-ODxzzj2SgfES2N9JB0DVdR-wtfdTXqDFw&s',
       categoryAttributes: { batteryType: 'Li-Po', voltage: '7.7V' },
     },
     {
@@ -99,7 +99,7 @@ const ProductsPage: React.FC = () => {
       quantity: 18,
       description: 'Soft and huggable dinosaur toy',
       category: 'Plush',
-      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=300&h=300&fit=crop',
+      image: 'https://m.media-amazon.com/images/I/61FgnR4VAuL._AC_UF894,1000_QL80_.jpg',
       categoryAttributes: { material: 'Fleece', size: 'Large' },
     },
   ];

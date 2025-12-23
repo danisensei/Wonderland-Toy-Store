@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
       name: 'Electronic Toys',
       icon: '🤖',
       description: 'Interactive and tech-filled toys for tech enthusiasts',
-      image: 'https://images.unsplash.com/photo-1594787318286-3d835c1cab83?w=500&h=300&fit=crop',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy7uWFD_UpRjwaPEX-oeLyJNfhn43n3Fa62g&s',
       gradient: 'from-cyan-400 to-blue-600',
     },
     {
@@ -44,7 +44,7 @@ const HomePage: React.FC = () => {
       name: 'Plush Toys',
       icon: '🧸',
       description: 'Soft and cuddly companions for all ages',
-      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=500&h=300&fit=crop',
+      image: 'https://www.eurokidsindia.com/blog/wp-content/uploads/2024/03/plush-toys.jpg',
       gradient: 'from-pink-400 to-red-600',
     },
     {
@@ -52,7 +52,7 @@ const HomePage: React.FC = () => {
       name: 'Board Games',
       icon: '🎲',
       description: 'Fun games for families and friends',
-      image: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=500&h=300&fit=crop',
+      image: 'https://m.media-amazon.com/images/I/6112nCtg60L._SS400_.jpg',
       gradient: 'from-purple-400 to-indigo-600',
     },
   ];
