@@ -1,10 +1,13 @@
 """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Product database model.
 """
 from sqlalchemy import Column, Integer, String, Float, DateTime, JSON
 from sqlalchemy.sql import func
 =======
+=======
+>>>>>>> Stashed changes
 Product Database Model - SQLAlchemy model for products
 """
 
@@ -15,11 +18,15 @@ from datetime import datetime
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 from database import Base
 
 
 class DBProduct(Base):
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     __tablename__ = "products"
 
@@ -38,6 +45,8 @@ class DBProduct(Base):
     def __repr__(self):
         return f"<DBProduct(id={self.id}, name='{self.name}', category='{self.category}')>"
 =======
+=======
+>>>>>>> Stashed changes
     """
     Product model for storing all toy products.
     Uses JSON field for category-specific attributes.
@@ -101,4 +110,7 @@ class DBProduct(Base):
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

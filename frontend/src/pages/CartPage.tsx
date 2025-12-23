@@ -25,7 +25,10 @@ const CartPage: React.FC = () => {
     const { name, value } = e.target;
     setCheckoutData(prev => ({ ...prev, [name]: value }));
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     setError(null);
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   };
@@ -37,6 +40,10 @@ const CartPage: React.FC = () => {
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+    // Validate checkout data
+>>>>>>> Stashed changes
 =======
     // Validate checkout data
 >>>>>>> Stashed changes
@@ -55,6 +62,10 @@ const CartPage: React.FC = () => {
 
     try {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+      // Create order via API
+>>>>>>> Stashed changes
 =======
       // Create order via API
 >>>>>>> Stashed changes
@@ -71,6 +82,10 @@ const CartPage: React.FC = () => {
       setOrderPlaced(true);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+      // Clear cart and redirect after delay
+>>>>>>> Stashed changes
 =======
       // Clear cart and redirect after delay
 >>>>>>> Stashed changes

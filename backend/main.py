@@ -1,6 +1,7 @@
 """
 Wonderland Toy Store - FastAPI Backend
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Main application entry point.
 """
 import os
@@ -30,6 +31,8 @@ app = FastAPI(
     title="Wonderland Toy Store API",
     description="Backend API for the Wonderland Toy Store e-commerce platform",
 =======
+=======
+>>>>>>> Stashed changes
 Main application entry point
 """
 
@@ -82,6 +85,9 @@ app = FastAPI(
     - **Plush** - Soft and cuddly companions
     - **BoardGame** - Fun games for families and friends
     """,
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     version="1.0.0",
     lifespan=lifespan
@@ -89,18 +95,24 @@ app = FastAPI(
 
 # Configure CORS
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 =======
+=======
+>>>>>>> Stashed changes
 # Allow the frontend to make requests to this API
 origins = [
     "http://localhost:3000",      # React dev server
     "http://localhost:3001",      # Alternative port
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 ]
 
@@ -112,6 +124,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 # Include routers with /api prefix
 app.include_router(auth_router, prefix="/api")
@@ -136,6 +149,8 @@ async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "service": "wonderland-api"}
 =======
+=======
+>>>>>>> Stashed changes
 # Include routers
 app.include_router(auth_router)
 app.include_router(products_router)
@@ -165,6 +180,9 @@ async def health_check():
         "status": "healthy",
         "service": "wonderland-toy-store-api"
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 
@@ -176,9 +194,13 @@ if __name__ == "__main__":
     debug = os.getenv("DEBUG", "True").lower() == "true"
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     print(f"🚀 Starting server on http://{host}:{port}")
     print(f"📚 API Docs available at http://{host}:{port}/docs")
     
+=======
+    print(f"[START] Starting server on http://{host}:{port}")
+>>>>>>> Stashed changes
 =======
     print(f"[START] Starting server on http://{host}:{port}")
 >>>>>>> Stashed changes

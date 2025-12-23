@@ -1,5 +1,6 @@
 """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Product Pydantic schemas.
 """
 from pydantic import BaseModel
@@ -42,6 +43,8 @@ class ProductResponse(BaseModel):
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
 =======
+=======
+>>>>>>> Stashed changes
 Product Schemas - Pydantic models for product requests/responses
 """
 
@@ -123,4 +126,7 @@ class ProductResponse(BaseModel):
 
     class Config:
         from_attributes = True
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

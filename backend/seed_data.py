@@ -1,5 +1,6 @@
 """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Seed data script to populate the database with sample products and users.
 """
 from database import SessionLocal, engine, Base
@@ -11,6 +12,8 @@ def seed_database():
     """Seed the database with initial data."""
     Base.metadata.create_all(bind=engine)
 =======
+=======
+>>>>>>> Stashed changes
 Seed Data Script - Populate database with sample products and admin user
 Run this script to initialize the database with test data.
 """
@@ -30,11 +33,15 @@ def seed_database():
     
     # Initialize database tables
     init_db()
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     
     db = SessionLocal()
     
     try:
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         existing_users = db.query(User).count()
         if existing_users > 0:
@@ -56,6 +63,8 @@ def seed_database():
             name="Demo Customer",
             hashed_password=hash_password("demo123"),
 =======
+=======
+>>>>>>> Stashed changes
         # Check if data already exists
         existing_products = db.query(DBProduct).count()
         if existing_products > 0:
@@ -78,11 +87,15 @@ def seed_database():
             email="demo@example.com",
             name="Demo User",
             password_hash=get_password_hash("demo123"),
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             role="customer"
         )
         db.add(demo_user)
         
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         electronic_toys = [
             DBProduct(
@@ -195,6 +208,8 @@ def seed_database():
         print(f"❌ Error seeding database: {e}")
         db.rollback()
 =======
+=======
+>>>>>>> Stashed changes
         # Sample Products - Electronic Toys
         electronic_products = [
             DBProduct(
@@ -343,6 +358,9 @@ def seed_database():
         print(f"[ERROR] Error seeding database: {e}")
         db.rollback()
         raise
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     finally:
         db.close()

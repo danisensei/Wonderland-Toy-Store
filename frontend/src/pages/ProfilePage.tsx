@@ -11,7 +11,10 @@ const ProfilePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   const [success, setSuccess] = useState<string | null>(null);
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   const [formData, setFormData] = useState({
@@ -20,6 +23,10 @@ const ProfilePage: React.FC = () => {
   });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  // Fetch user data on mount
+>>>>>>> Stashed changes
 =======
   // Fetch user data on mount
 >>>>>>> Stashed changes
@@ -30,6 +37,10 @@ const ProfilePage: React.FC = () => {
   }, [isAuthenticated, user, checkAuth]);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  // Update form data when user loads
+>>>>>>> Stashed changes
 =======
   // Update form data when user loads
 >>>>>>> Stashed changes
@@ -46,6 +57,7 @@ const ProfilePage: React.FC = () => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     setError(null);
     setSuccess(null);
   };
@@ -60,11 +72,16 @@ const ProfilePage: React.FC = () => {
     setError(null);
     setSuccess(null);
 =======
+=======
+>>>>>>> Stashed changes
   };
 
   const handleSave = async () => {
     setIsLoading(true);
     setError(null);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     try {
@@ -73,14 +90,20 @@ const ProfilePage: React.FC = () => {
         email: formData.email,
       });
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       await checkAuth();
       setIsEditing(false);
       setSuccess('Profile updated successfully!');
 =======
+=======
+>>>>>>> Stashed changes
 
       // Refresh user data
       await checkAuth();
       setIsEditing(false);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     } catch (err: any) {
       setError(err.message || 'Failed to update profile');
@@ -135,6 +158,19 @@ const ProfilePage: React.FC = () => {
     );
   }
 
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-light py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col justify-center items-center h-64">
+            <FaSpinner className="text-4xl text-primary animate-spin mb-4" />
+            <p className="text-gray-600">Loading profile...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-light py-12">
       <div className="container mx-auto px-4">
@@ -142,6 +178,10 @@ const ProfilePage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+          {/* Profile Card */}
+>>>>>>> Stashed changes
 =======
           {/* Profile Card */}
 >>>>>>> Stashed changes
@@ -182,6 +222,7 @@ const ProfilePage: React.FC = () => {
               </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               {success && (
                 <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg text-green-700">
                   {success}
@@ -195,6 +236,16 @@ const ProfilePage: React.FC = () => {
               )}
 
               <div className="space-y-6">
+=======
+              {error && (
+                <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-lg text-red-700">
+                  {error}
+                </div>
+              )}
+
+              <div className="space-y-6">
+                {/* Name */}
+>>>>>>> Stashed changes
 =======
               {error && (
                 <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-lg text-red-700">
@@ -223,6 +274,10 @@ const ProfilePage: React.FC = () => {
                 </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+                {/* Email */}
+>>>>>>> Stashed changes
 =======
                 {/* Email */}
 >>>>>>> Stashed changes
@@ -244,22 +299,32 @@ const ProfilePage: React.FC = () => {
                 </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 <div>
                   <label className="text-sm font-semibold text-gray-600 mb-2 block">Role</label>
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
 =======
+=======
+>>>>>>> Stashed changes
                 {/* Role */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-gray-600 mb-2">
                     Role
                   </label>
                   <span className={`badge ${user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                     {user.role === 'admin' ? '👑 Admin' : '👤 Customer'}
                   </span>
                 </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+                {/* Member Since */}
+>>>>>>> Stashed changes
 =======
                 {/* Member Since */}
 >>>>>>> Stashed changes
@@ -282,6 +347,10 @@ const ProfilePage: React.FC = () => {
           </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+          {/* Quick Actions */}
+>>>>>>> Stashed changes
 =======
           {/* Quick Actions */}
 >>>>>>> Stashed changes

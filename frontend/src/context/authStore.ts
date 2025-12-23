@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { persist } from 'zustand/middleware';
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import { authService, User, LoginResponse } from '../services/authService';
@@ -15,6 +18,7 @@ export interface AuthStore {
   setToken: (token: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, name: string, password: string) => Promise<void>;
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   adminLogin: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -37,12 +41,22 @@ export const useAuthStore = create<AuthStore>()(
   clearError: () => void;
 }
 
+=======
+  logout: () => void;
+  checkAuth: () => Promise<void>;
+  clearError: () => void;
+}
+
+>>>>>>> Stashed changes
 export const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
   token: localStorage.getItem('authToken'),
   isAuthenticated: !!localStorage.getItem('authToken'),
   isLoading: false,
   error: null,
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
       setUser: (user) => {
@@ -285,5 +299,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 }));
 
 // Export User type for convenience
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 export type { User };

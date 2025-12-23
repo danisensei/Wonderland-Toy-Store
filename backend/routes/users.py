@@ -1,5 +1,6 @@
 """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 User routes.
 """
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -16,6 +17,8 @@ router = APIRouter(prefix="/users", tags=["Users"])
 async def get_profile(current_user: User = Depends(get_current_user)):
     """Get current user profile."""
 =======
+=======
+>>>>>>> Stashed changes
 User Routes - User profile management
 """
 
@@ -45,12 +48,16 @@ async def get_profile(current_user: User = Depends(get_current_user)):
     Returns:
         User profile information
     """
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     return UserResponse(
         id=str(current_user.id),
         email=current_user.email,
         name=current_user.name,
         role=current_user.role,
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         createdAt=current_user.created_at.isoformat() if current_user.created_at else ""
     )
@@ -78,6 +85,8 @@ async def update_profile(
     if update_data.name:
         current_user.name = update_data.name
 =======
+=======
+>>>>>>> Stashed changes
         createdAt=current_user.created_at.isoformat() if current_user.created_at else None
     )
 
@@ -112,6 +121,9 @@ async def update_profile(
     # Update name if provided
     if user_data.name:
         current_user.name = user_data.name
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     
     db.commit()
@@ -123,7 +135,11 @@ async def update_profile(
         name=current_user.name,
         role=current_user.role,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         createdAt=current_user.created_at.isoformat() if current_user.created_at else ""
+=======
+        createdAt=current_user.created_at.isoformat() if current_user.created_at else None
+>>>>>>> Stashed changes
 =======
         createdAt=current_user.created_at.isoformat() if current_user.created_at else None
 >>>>>>> Stashed changes

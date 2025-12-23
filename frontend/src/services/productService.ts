@@ -10,7 +10,11 @@ export interface Product {
   category: 'Electronic' | 'Plush' | 'BoardGame';
   image: string;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   in_stock?: boolean;
+=======
+  in_stock: boolean;
+>>>>>>> Stashed changes
 =======
   in_stock: boolean;
 >>>>>>> Stashed changes
@@ -32,6 +36,7 @@ export interface ProductFilters {
   minPrice?: number;
   maxPrice?: number;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 }
 
 export interface CreateProductData {
@@ -46,6 +51,12 @@ export interface CreateProductData {
 }
 
 export const productService = {
+=======
+}
+
+export const productService = {
+  // Get all products with optional filtering
+>>>>>>> Stashed changes
 =======
 }
 
@@ -107,7 +118,12 @@ export const productService = {
   },
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   createProduct: async (productData: CreateProductData): Promise<Product> => {
+=======
+  // Create product (admin only)
+  createProduct: async (productData: Omit<Product, 'id' | 'in_stock' | 'created_at' | 'updated_at'>): Promise<Product> => {
+>>>>>>> Stashed changes
 =======
   // Create product (admin only)
   createProduct: async (productData: Omit<Product, 'id' | 'in_stock' | 'created_at' | 'updated_at'>): Promise<Product> => {
@@ -122,7 +138,12 @@ export const productService = {
   },
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   updateProduct: async (id: string, productData: Partial<CreateProductData>): Promise<Product> => {
+=======
+  // Update product (admin only)
+  updateProduct: async (id: string, productData: Partial<Product>): Promise<Product> => {
+>>>>>>> Stashed changes
 =======
   // Update product (admin only)
   updateProduct: async (id: string, productData: Partial<Product>): Promise<Product> => {
@@ -137,6 +158,10 @@ export const productService = {
   },
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  // Delete product (admin only)
+>>>>>>> Stashed changes
 =======
   // Delete product (admin only)
 >>>>>>> Stashed changes

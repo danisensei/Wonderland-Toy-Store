@@ -33,6 +33,9 @@ export const orderService = {
 <<<<<<< Updated upstream
 =======
   // Create new order
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   createOrder: async (orderData: CreateOrderData): Promise<Order> => {
     try {

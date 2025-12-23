@@ -1,5 +1,6 @@
 """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Order and OrderItem database models.
 """
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
@@ -39,6 +40,8 @@ class Order(Base):
 
 class OrderItem(Base):
 =======
+=======
+>>>>>>> Stashed changes
 Order Database Models - SQLAlchemy models for orders and order items
 """
 
@@ -125,6 +128,9 @@ class OrderItem(Base):
         price: Price at time of order
         product_name: Product name at time of order
     """
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     __tablename__ = "order_items"
 
@@ -133,6 +139,7 @@ class OrderItem(Base):
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
     quantity = Column(Integer, nullable=False, default=1)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     price_at_time = Column(Float, nullable=False)
 
     order = relationship("Order", back_populates="items")
@@ -140,6 +147,8 @@ class OrderItem(Base):
     def __repr__(self):
         return f"<OrderItem(id={self.id}, product_id={self.product_id}, quantity={self.quantity})>"
 =======
+=======
+>>>>>>> Stashed changes
     price = Column(Float, nullable=False)
     product_name = Column(String(255))  # Store product name at time of order
 
@@ -159,4 +168,7 @@ class OrderItem(Base):
             "quantity": self.quantity,
             "price": self.price
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

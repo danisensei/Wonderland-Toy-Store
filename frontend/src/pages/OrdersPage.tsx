@@ -12,6 +12,10 @@ const OrdersPage: React.FC = () => {
   const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(null);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  // Fetch orders from API
+>>>>>>> Stashed changes
 =======
   // Fetch orders from API
 >>>>>>> Stashed changes
@@ -123,6 +127,9 @@ const OrdersPage: React.FC = () => {
             <Link to="/login" className="btn btn-primary">
               Login
             </Link>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
           </div>
         </div>
@@ -136,16 +143,22 @@ const OrdersPage: React.FC = () => {
         <h1 className="text-4xl font-bold mb-8">My Orders</h1>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         {error && (
           <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
             <div className="flex items-center gap-3 text-red-700">
               <FaExclamationTriangle className="text-2xl flex-shrink-0" />
 =======
+=======
+>>>>>>> Stashed changes
         {/* Error State */}
         {error && (
           <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
             <div className="flex items-center gap-3 text-red-700">
               <FaExclamationTriangle className="text-2xl" />
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
               <div>
                 <h3 className="font-bold">Error Loading Orders</h3>
@@ -156,6 +169,10 @@ const OrdersPage: React.FC = () => {
         )}
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+        {/* Loading State */}
+>>>>>>> Stashed changes
 =======
         {/* Loading State */}
 >>>>>>> Stashed changes
@@ -169,15 +186,21 @@ const OrdersPage: React.FC = () => {
             <p className="text-4xl mb-4">📦</p>
             <h2 className="text-2xl font-bold mb-4">No Orders Yet</h2>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <p className="text-gray-600 mb-6">You haven't placed any orders yet. Start shopping!</p>
             <Link to="/products" className="btn btn-primary">Shop Now</Link>
 =======
+=======
+>>>>>>> Stashed changes
             <p className="text-gray-600 mb-6">
               You haven't placed any orders yet. Start shopping!
             </p>
             <Link to="/products" className="btn btn-primary">
               Shop Now
             </Link>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
           </div>
         ) : (
@@ -206,6 +229,9 @@ const OrdersPage: React.FC = () => {
 =======
                     {order.items.map((item) => (
                       <div key={item.id || item.productId} className="flex justify-between text-sm">
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                         <span>{item.name || `Product #${item.productId}`} x {item.quantity}</span>
                         <span className="font-semibold">
@@ -217,6 +243,10 @@ const OrdersPage: React.FC = () => {
                 </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+                {/* Delivery Address */}
+>>>>>>> Stashed changes
 =======
                 {/* Delivery Address */}
 >>>>>>> Stashed changes
@@ -230,6 +260,10 @@ const OrdersPage: React.FC = () => {
                 )}
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+                {/* Order Total & Actions */}
+>>>>>>> Stashed changes
 =======
                 {/* Order Total & Actions */}
 >>>>>>> Stashed changes
@@ -238,23 +272,33 @@ const OrdersPage: React.FC = () => {
                     <span className="font-bold">Total: </span>
                     <span className="text-xl font-bold text-primary">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                       PKR {order.totalAmount.toLocaleString('en-PK', { maximumFractionDigits: 0 })}
                     </span>
                   </div>
 
 =======
+=======
+>>>>>>> Stashed changes
                       ${order.totalAmount.toFixed(2)}
                     </span>
                   </div>
 
                   {/* Cancel button for pending/processing orders */}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                   {(order.status === 'pending' || order.status === 'processing') && (
                     <button
                       onClick={() => handleCancelOrder(order.id)}
                       disabled={cancellingOrderId === order.id}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                       className="flex items-center gap-2 px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 disabled:opacity-50 transition"
+=======
+                      className="btn btn-outline text-red-500 border-red-500 hover:bg-red-50 disabled:opacity-50"
+>>>>>>> Stashed changes
 =======
                       className="btn btn-outline text-red-500 border-red-500 hover:bg-red-50 disabled:opacity-50"
 >>>>>>> Stashed changes
@@ -263,9 +307,14 @@ const OrdersPage: React.FC = () => {
                         <FaSpinner className="animate-spin" />
                       ) : (
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         <FaTimesCircle />
                       )}
                       Cancel Order
+=======
+                        'Cancel Order'
+                      )}
+>>>>>>> Stashed changes
 =======
                         'Cancel Order'
                       )}

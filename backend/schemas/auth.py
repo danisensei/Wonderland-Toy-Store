@@ -1,18 +1,25 @@
 """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Authentication Pydantic schemas.
 """
 from pydantic import BaseModel, EmailStr
 =======
+=======
+>>>>>>> Stashed changes
 Authentication Schemas - Pydantic models for auth requests/responses
 """
 
 from pydantic import BaseModel, EmailStr, Field
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 from typing import Optional
 
 
 class UserCreate(BaseModel):
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     email: EmailStr
     name: str
@@ -32,6 +39,8 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     user_id: Optional[int] = None
 =======
+=======
+>>>>>>> Stashed changes
     """Schema for user registration request."""
     email: EmailStr = Field(..., description="User's email address")
     name: str = Field(..., min_length=2, max_length=100, description="User's full name")
@@ -86,4 +95,7 @@ class TokenData(BaseModel):
     """Schema for decoded JWT token payload."""
     user_id: Optional[int] = None
     email: Optional[str] = None
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

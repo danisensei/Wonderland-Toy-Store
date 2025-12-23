@@ -1,5 +1,6 @@
 """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Routes package.
 """
 from .auth import router as auth_router
@@ -8,6 +9,8 @@ from .orders import router as orders_router
 from .users import router as users_router
 from .admin import router as admin_router
 =======
+=======
+>>>>>>> Stashed changes
 Wonderland Toy Store - Routes Package
 """
 
@@ -17,4 +20,7 @@ from routes.orders import router as orders_router
 from routes.users import router as users_router
 
 __all__ = ['auth_router', 'products_router', 'orders_router', 'users_router']
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

@@ -1,8 +1,14 @@
 """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Security utilities for password hashing and JWT tokens.
 """
 import os
+=======
+Security Utilities - Password hashing and JWT token management
+"""
+
+>>>>>>> Stashed changes
 =======
 Security Utilities - Password hashing and JWT token management
 """
@@ -13,12 +19,15 @@ from typing import Optional
 from jose import JWTError, jwt
 import bcrypt
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 from dotenv import load_dotenv
 
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY", "wonderland-secret-key")
 =======
+=======
+>>>>>>> Stashed changes
 import os
 from dotenv import load_dotenv
 
@@ -27,11 +36,15 @@ load_dotenv()
 
 # JWT Configuration
 SECRET_KEY = os.getenv("SECRET_KEY", "wonderland-toy-store-secret-key")
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))
 
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 def hash_password(password: str) -> str:
     """Hash a password using bcrypt."""
@@ -43,6 +56,8 @@ def hash_password(password: str) -> str:
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
 =======
+=======
+>>>>>>> Stashed changes
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Verify a plain password against a hashed password.
@@ -54,6 +69,9 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         bool: True if password matches, False otherwise
     """
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     return bcrypt.checkpw(
         plain_password.encode('utf-8'),
@@ -62,10 +80,13 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     """Create a JWT access token."""
     to_encode = data.copy()
 =======
+=======
+>>>>>>> Stashed changes
 def get_password_hash(password: str) -> str:
     """
     Hash a password using bcrypt.
@@ -94,6 +115,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     """
     to_encode = data.copy()
     
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -103,12 +127,15 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     return encoded_jwt
 
 
 def verify_token(token: str) -> Optional[dict]:
     """Verify and decode a JWT token."""
 =======
+=======
+>>>>>>> Stashed changes
     
     return encoded_jwt
 
@@ -123,6 +150,9 @@ def decode_access_token(token: str) -> Optional[dict]:
     Returns:
         dict: Decoded token payload if valid, None if invalid
     """
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

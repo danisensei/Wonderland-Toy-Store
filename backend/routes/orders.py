@@ -1,5 +1,6 @@
 """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Order routes.
 """
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -16,6 +17,8 @@ router = APIRouter(prefix="/orders", tags=["Orders"])
 
 @router.post("", response_model=OrderResponse)
 =======
+=======
+>>>>>>> Stashed changes
 Order Routes - Create, view, and manage orders
 """
 
@@ -47,12 +50,16 @@ def generate_order_number() -> str:
 
 
 @router.post("", response_model=dict, status_code=status.HTTP_201_CREATED)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 async def create_order(
     order_data: OrderCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     """Create a new order."""
     if not order_data.items:
@@ -73,6 +80,8 @@ async def create_order(
             )
         if product.quantity < item.quantity:
 =======
+=======
+>>>>>>> Stashed changes
     """
     Create a new order.
     
@@ -100,12 +109,16 @@ async def create_order(
             )
         
         if product.quantity < item_data.quantity:
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Insufficient stock for {product.name}. Available: {product.quantity}"
             )
         
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         order_items_data.append({
             "product": product,
@@ -119,6 +132,8 @@ async def create_order(
         total_amount=total_amount,
         status="pending",
 =======
+=======
+>>>>>>> Stashed changes
         # Calculate item total
         item_total = product.price * item_data.quantity
         total_amount += item_total
@@ -137,11 +152,15 @@ async def create_order(
         user_id=current_user.id,
         total_amount=total_amount,
         status=OrderStatus.PENDING.value,
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         delivery_address=order_data.deliveryAddress,
         city=order_data.city,
         postal_code=order_data.postalCode
     )
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     db.add(new_order)
     db.flush()
@@ -156,6 +175,8 @@ async def create_order(
         db.add(order_item)
         item_data["product"].quantity -= item_data["quantity"]
 =======
+=======
+>>>>>>> Stashed changes
     
     db.add(new_order)
     db.flush()  # Get the order ID without committing
@@ -173,11 +194,15 @@ async def create_order(
         
         # Reduce product stock
         item_info["product"].quantity -= item_info["quantity"]
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     
     db.commit()
     db.refresh(new_order)
     
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     items = []
     for item in new_order.items:
@@ -245,6 +270,8 @@ async def get_user_orders(
 
 @router.get("/{order_id}", response_model=OrderResponse)
 =======
+=======
+>>>>>>> Stashed changes
     return new_order.to_dict()
 
 
@@ -271,6 +298,9 @@ async def get_my_orders(
 
 
 @router.get("/{order_id}", response_model=dict)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 async def get_order(
     order_id: int,
@@ -278,9 +308,12 @@ async def get_order(
     current_user: User = Depends(get_current_user)
 ):
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     """Get a specific order by ID."""
     order = db.query(Order).filter(Order.id == order_id).first()
 =======
+=======
+>>>>>>> Stashed changes
     """
     Get a specific order by ID.
     
@@ -294,6 +327,9 @@ async def get_order(
     """
     order = db.query(Order).filter(Order.id == order_id).first()
     
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     if not order:
         raise HTTPException(
@@ -302,6 +338,10 @@ async def get_order(
         )
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+    # Check if user owns the order or is admin
+>>>>>>> Stashed changes
 =======
     # Check if user owns the order or is admin
 >>>>>>> Stashed changes
@@ -311,6 +351,7 @@ async def get_order(
             detail="Not authorized to view this order"
         )
     
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     items = []
     for item in order.items:
@@ -340,10 +381,15 @@ async def get_order(
 
 @router.put("/{order_id}/cancel", response_model=OrderResponse)
 =======
+=======
+>>>>>>> Stashed changes
     return order.to_dict()
 
 
 @router.put("/{order_id}/cancel", response_model=dict)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 async def cancel_order(
     order_id: int,
@@ -351,9 +397,12 @@ async def cancel_order(
     current_user: User = Depends(get_current_user)
 ):
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     """Cancel an order and restore stock."""
     order = db.query(Order).filter(Order.id == order_id).first()
 =======
+=======
+>>>>>>> Stashed changes
     """
     Cancel an order.
     
@@ -367,6 +416,9 @@ async def cancel_order(
     """
     order = db.query(Order).filter(Order.id == order_id).first()
     
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     if not order:
         raise HTTPException(
@@ -375,6 +427,10 @@ async def cancel_order(
         )
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+    # Check if user owns the order or is admin
+>>>>>>> Stashed changes
 =======
     # Check if user owns the order or is admin
 >>>>>>> Stashed changes
@@ -385,6 +441,7 @@ async def cancel_order(
         )
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     if order.status not in ["pending", "processing"]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -392,6 +449,8 @@ async def cancel_order(
         )
     
 =======
+=======
+>>>>>>> Stashed changes
     # Check if order can be cancelled
     if order.status in [OrderStatus.SHIPPED.value, OrderStatus.DELIVERED.value]:
         raise HTTPException(
@@ -406,12 +465,16 @@ async def cancel_order(
         )
     
     # Restore product quantities
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     for item in order.items:
         product = db.query(DBProduct).filter(DBProduct.id == item.product_id).first()
         if product:
             product.quantity += item.quantity
     
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     order.status = "cancelled"
     order.updated_at = datetime.utcnow()
@@ -443,6 +506,8 @@ async def cancel_order(
         updatedAt=order.updated_at.isoformat() if order.updated_at else ""
     )
 =======
+=======
+>>>>>>> Stashed changes
     # Cancel the order
     order.status = OrderStatus.CANCELLED.value
     
@@ -450,4 +515,7 @@ async def cancel_order(
     db.refresh(order)
     
     return order.to_dict()
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

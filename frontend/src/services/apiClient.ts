@@ -24,6 +24,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       if (error.response.status === 401) {
         localStorage.removeItem('authToken');
       }
@@ -33,6 +34,8 @@ apiClient.interceptors.response.use(
       error.message = message;
     } else if (error.request) {
 =======
+=======
+>>>>>>> Stashed changes
       // Server responded with error status
       if (error.response.status === 401) {
         // Token expired or invalid - clear auth state
@@ -45,6 +48,9 @@ apiClient.interceptors.response.use(
       error.message = message;
     } else if (error.request) {
       // Request made but no response received
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       error.message = 'Unable to connect to server. Please check if the backend is running.';
     }
