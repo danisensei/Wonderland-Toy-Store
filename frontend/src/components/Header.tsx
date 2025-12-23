@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaHome, FaUser, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
+import { FaShoppingCart, FaHome, FaUser, FaSignOutAlt, FaBars, FaTimes, FaChartBar } from 'react-icons/fa';
 import { useCartStore } from '../context/cartStore';
 import { useAuthStore } from '../context/authStore';
 
@@ -51,6 +51,14 @@ const Header: React.FC = () => {
               FAQ
               <span className="absolute bottom-0 left-0 w-0 h-1 bg-accent group-hover:w-full transition-all duration-300 rounded-full"></span>
             </Link>
+            {user?.role === 'admin' && (
+              <Link
+                to="/admin"
+                className="hover:text-accent transition-all duration-300 group relative flex items-center gap-2 bg-white/10 px-3 py-1 rounded-lg"
+              >
+                <FaChartBar /> Admin
+              </Link>
+            )}
           </nav>
 
           {/* Right Side Actions */}
@@ -74,14 +82,20 @@ const Header: React.FC = () => {
             {isAuthenticated && user ? (
               <div className="hidden md:flex items-center gap-4">
                 <div className="text-sm font-semibold hidden lg:block">
-                  Welcome, {user.name?.split(' ')[0]}!
+                  {user.role === 'admin' ? (
+                    <span className="text-yellow-200">👨‍💼 Admin: {user.name}</span>
+                  ) : (
+                    <span>Welcome, {user.name?.split(' ')[0]}!</span>
+                  )}
                 </div>
-                <Link
-                  to="/profile"
-                  className="flex items-center gap-1 hover:text-accent transition-all group"
-                >
-                  <FaUser className="group-hover:scale-110 transition-transform" />
-                </Link>
+                {user.role !== 'admin' && (
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-1 hover:text-accent transition-all group"
+                  >
+                    <FaUser className="group-hover:scale-110 transition-transform" />
+                  </Link>
+                )}
                 <button
                   onClick={logout}
                   className="flex items-center gap-1 hover:text-accent transition-all group"

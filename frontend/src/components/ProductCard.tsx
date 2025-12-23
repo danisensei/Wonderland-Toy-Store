@@ -128,7 +128,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
         <div className="mt-auto space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-3xl font-display font-bold gradient-text">
-              ${product.price.toFixed(2)}
+              PKR {product.price.toLocaleString('en-PK', { maximumFractionDigits: 0 })}
             </span>
             {product.quantity > 0 && (
               <span className="text-xs text-gray-500 font-semibold">{product.brand}</span>

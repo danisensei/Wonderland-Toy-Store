@@ -85,7 +85,7 @@ const CartPage: React.FC = () => {
                       Category: {item.category}
                     </p>
                     <p className="text-primary font-semibold">
-                      ${item.price.toFixed(2)} each
+                      PKR {item.price.toLocaleString('en-PK', { maximumFractionDigits: 0 })} each
                     </p>
                   </div>
 
@@ -115,7 +115,7 @@ const CartPage: React.FC = () => {
 
                     <div className="text-right min-w-24">
                       <p className="text-xl font-bold text-primary">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        PKR {(item.price * item.quantity).toLocaleString('en-PK', { maximumFractionDigits: 0 })}
                       </p>
                       <p className="text-xs text-gray-500">Subtotal</p>
                     </div>
@@ -140,7 +140,7 @@ const CartPage: React.FC = () => {
                   <div className="flex justify-between">
                     <span>Subtotal ({items.reduce((t, i) => t + i.quantity, 0)} items)</span>
                     <span className="font-semibold">
-                      ${getTotalPrice().toFixed(2)}
+                      PKR {getTotalPrice().toLocaleString('en-PK', { maximumFractionDigits: 0 })}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -150,7 +150,7 @@ const CartPage: React.FC = () => {
                   <div className="flex justify-between">
                     <span>Tax</span>
                     <span className="font-semibold">
-                      ${(getTotalPrice() * 0.1).toFixed(2)}
+                      PKR {(getTotalPrice() * 0.1).toLocaleString('en-PK', { maximumFractionDigits: 0 })}
                     </span>
                   </div>
                 </div>
@@ -158,7 +158,7 @@ const CartPage: React.FC = () => {
                 <div className="flex justify-between py-4 text-2xl font-bold mb-6">
                   <span>Total</span>
                   <span className="text-primary">
-                    ${(getTotalPrice() * 1.1).toFixed(2)}
+                    PKR {(getTotalPrice() * 1.1).toLocaleString('en-PK', { maximumFractionDigits: 0 })}
                   </span>
                 </div>
 

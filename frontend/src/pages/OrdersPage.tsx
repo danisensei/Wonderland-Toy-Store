@@ -129,7 +129,7 @@ const OrdersPage: React.FC = () => {
                       <div key={item.id} className="flex justify-between text-sm">
                         <span>{item.name} x {item.quantity}</span>
                         <span className="font-semibold">
-                          ${(item.price * item.quantity).toFixed(2)}
+                            {(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
                     ))}

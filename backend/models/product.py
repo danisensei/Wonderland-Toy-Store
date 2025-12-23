@@ -16,7 +16,7 @@ class Product:
         id (int): Unique product identifier
         name (str): Product name
         brand (str): Product brand
-        price (float): Product price
+        price (float): Product price in PKR (Pakistani Rupee)
         quantity (int): Available stock quantity
         description (str): Product description
         image_url (str): URL to product image
@@ -231,7 +231,7 @@ class Product:
 
     def __str__(self) -> str:
         """String representation of product."""
-        return f"Product(id={self._id}, name={self._name}, brand={self._brand}, price=${self._price}, quantity={self._quantity})"
+        return f"Product(id={self._id}, name={self._name}, brand={self._brand}, price=PKR {self._price:,.0f}, quantity={self._quantity})"
 
     def __repr__(self) -> str:
         """Developer-friendly representation."""
