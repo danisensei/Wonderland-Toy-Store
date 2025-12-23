@@ -1,21 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaSpinner } from 'react-icons/fa';
+import { useSearchParams } from 'react-router-dom';
+import { FaSearch, FaSpinner, FaExclamationTriangle } from 'react-icons/fa';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 import { Product } from '../services/productService';
 import { useProductStore } from '../context/productStore';
 
 const ProductsPage: React.FC = () => {
-  const { products } = useProductStore();
+  const [searchParams] = useSearchParams();
+  const { products, isLoading, error, fetchProducts } = useProductStore();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    searchParams.get('category')
+  );
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState('name');
 
-
+  // Fetch products on mount
   useEffect(() => {
-    let filtered = products;
+    fetchProducts().catch(console.error);
+  }, [fetchProducts]);
+
+  // Update category from URL params
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [searchParams]);
+
+  // Filter and sort products
+  useEffect(() => {
+    let filtered = [...products];
 
     // Filter by category
     if (selectedCategory) {
@@ -24,11 +40,12 @@ const ProductsPage: React.FC = () => {
 
     // Filter by search
     if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (p) =>
-          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.description.toLowerCase().includes(searchQuery.toLowerCase())
+          p.name.toLowerCase().includes(query) ||
+          p.brand.toLowerCase().includes(query) ||
+          p.description.toLowerCase().includes(query)
       );
     }
 
@@ -90,6 +107,22 @@ const ProductsPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Error State */}
+        {error && (
+          <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center gap-3 text-red-700">
+              <FaExclamationTriangle className="text-2xl flex-shrink-0" />
+              <div>
+                <h3 className="font-bold">Error Loading Products</h3>
+                <p>{error}</p>
+                <p className="text-sm mt-2">
+                  Make sure the backend is running: <code className="bg-red-100 px-2 py-1 rounded">cd backend && python main.py</code>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Main Content */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Sidebar */}
@@ -102,9 +135,10 @@ const ProductsPage: React.FC = () => {
 
           {/* Products Grid */}
           <main className="md:col-span-3">
-            {loading ? (
-              <div className="flex justify-center items-center h-96">
-                <FaSpinner className="text-4xl text-primary animate-spin" />
+            {isLoading ? (
+              <div className="flex flex-col justify-center items-center h-96">
+                <FaSpinner className="text-4xl text-primary animate-spin mb-4" />
+                <p className="text-gray-600">Loading products...</p>
               </div>
             ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -131,4 +165,3 @@ const ProductsPage: React.FC = () => {
 };
 
 export default ProductsPage;
-

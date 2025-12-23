@@ -4,19 +4,22 @@ import { useAuthStore } from '../context/authStore';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requiredRole?: 'admin' | 'customer';
+  requireAdmin?: boolean;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole = 'admin' }) => {
-  const { isAuthenticated, user } = useAuthStore();
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requireAdmin = false
+}) => {
+  const { isAuthenticated, user, isAdmin } = useAuthStore();
 
-  // Not authenticated at all
-  if (!isAuthenticated || !user) {
-    return <Navigate to="/admin-login" replace />;
+  // Not authenticated - redirect to login
+  if (!isAuthenticated) {
+    return <Navigate to={requireAdmin ? "/admin-login" : "/login"} replace />;
   }
 
-  // Check role if required
-  if (requiredRole === 'admin' && user.role !== 'admin') {
+  // Requires admin but user is not admin
+  if (requireAdmin && !isAdmin()) {
     return <Navigate to="/" replace />;
   }
 
@@ -24,4 +27,3 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole 
 };
 
 export default ProtectedRoute;
-

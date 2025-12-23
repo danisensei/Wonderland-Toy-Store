@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaEnvelope, FaLock, FaUser, FaPhone } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaUser, FaSpinner } from 'react-icons/fa';
 import { useAuthStore } from '../context/authStore';
 
 const SignupPage: React.FC = () => {
@@ -10,11 +10,11 @@ const SignupPage: React.FC = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    phone: '',
   });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const setUser = useAuthStore((state) => state.setUser);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+
+  const { register, isLoading } = useAuthStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -24,42 +24,40 @@ const SignupPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setError('');
 
     // Validation
-    if (!formData.name || !formData.email || !formData.password || !formData.phone) {
+    if (!formData.name || !formData.email || !formData.password) {
       setError('All fields are required');
-      setLoading(false);
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      setLoading(false);
+    if (formData.name.length < 2) {
+      setError('Name must be at least 2 characters');
       return;
     }
 
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters');
-      setLoading(false);
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      const user = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: formData.name,
-        email: formData.email,
-        role: 'customer' as const,
-        createdAt: new Date().toISOString(),
-      };
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
 
-      setUser(user);
-      localStorage.setItem('authToken', 'mock-token-' + Math.random());
+    if (!acceptTerms) {
+      setError('You must accept the Terms of Service');
+      return;
+    }
+
+    try {
+      await register(formData.email, formData.name, formData.password);
       navigate('/');
-      setLoading(false);
-    }, 1000);
+    } catch (err: any) {
+      setError(err.message || 'Registration failed. Please try again.');
+    }
   };
 
   return (
@@ -93,6 +91,7 @@ const SignupPage: React.FC = () => {
                     onChange={handleChange}
                     placeholder="John Doe"
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -109,22 +108,7 @@ const SignupPage: React.FC = () => {
                     onChange={handleChange}
                     placeholder="john@example.com"
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-                  />
-                </div>
-              </div>
-
-              {/* Phone Input */}
-              <div>
-                <label className="block text-sm font-semibold mb-2">Phone Number</label>
-                <div className="relative">
-                  <FaPhone className="absolute left-3 top-3.5 text-gray-400" />
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="(555) 123-4567"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -141,8 +125,10 @@ const SignupPage: React.FC = () => {
                     onChange={handleChange}
                     placeholder="••••••••"
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                    disabled={isLoading}
                   />
                 </div>
+                <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
               </div>
 
               {/* Confirm Password Input */}
@@ -157,17 +143,46 @@ const SignupPage: React.FC = () => {
                     onChange={handleChange}
                     placeholder="••••••••"
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                    disabled={isLoading}
                   />
                 </div>
+              </div>
+
+              {/* Terms Checkbox */}
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  className="mt-1 cursor-pointer"
+                />
+                <label htmlFor="terms" className="text-sm text-gray-600">
+                  I agree to the{' '}
+                  <Link to="#" className="text-primary hover:underline">
+                    Terms of Service
+                  </Link>{' '}
+                  and{' '}
+                  <Link to="#" className="text-primary hover:underline">
+                    Privacy Policy
+                  </Link>
+                </label>
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full btn btn-primary py-3 mt-6 disabled:opacity-50"
+                disabled={isLoading}
+                className="w-full btn btn-primary py-3 mt-6 disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {loading ? 'Creating Account...' : 'Create Account'}
+                {isLoading ? (
+                  <>
+                    <FaSpinner className="animate-spin" />
+                    Creating Account...
+                  </>
+                ) : (
+                  'Create Account'
+                )}
               </button>
             </form>
 
@@ -186,4 +201,3 @@ const SignupPage: React.FC = () => {
 };
 
 export default SignupPage;
-

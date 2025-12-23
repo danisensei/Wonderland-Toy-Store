@@ -1,67 +1,84 @@
 import apiClient from './apiClient';
 
+export interface OrderItem {
+  id?: string;
+  productId: string;
+  name?: string;
+  quantity: number;
+  price: number;
+}
+
 export interface Order {
   id: string;
   orderNumber: string;
   userId: string;
-  items: Array<{
-    productId: string;
-    quantity: number;
-    price: number;
-  }>;
+  items: OrderItem[];
   totalAmount: number;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   deliveryAddress: string;
+  city?: string;
+  postalCode?: string;
   createdAt: string;
   updatedAt: string;
 }
 
+export interface CreateOrderData {
+  items: Array<{ productId: string; quantity: number }>;
+  deliveryAddress: string;
+  city?: string;
+  postalCode?: string;
+}
+
 export const orderService = {
-  // Create new order
-  createOrder: async (orderData: {
-    items: Array<{ productId: string; quantity: number }>;
-    deliveryAddress: string;
-  }): Promise<Order> => {
+  /**
+   * Create a new order
+   */
+  createOrder: async (orderData: CreateOrderData): Promise<Order> => {
     try {
       const response = await apiClient.post('/orders', orderData);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating order:', error);
-      throw error;
+      throw new Error(error.message || 'Failed to create order');
     }
   },
 
-  // Get user orders
+  /**
+   * Get current user's orders
+   */
   getUserOrders: async (): Promise<Order[]> => {
     try {
       const response = await apiClient.get('/orders/my-orders');
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching orders:', error);
-      throw error;
+      throw new Error(error.message || 'Failed to fetch orders');
     }
   },
 
-  // Get order by ID
+  /**
+   * Get order by ID
+   */
   getOrderById: async (id: string): Promise<Order> => {
     try {
       const response = await apiClient.get(`/orders/${id}`);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching order:', error);
-      throw error;
+      throw new Error(error.message || 'Failed to fetch order');
     }
   },
 
-  // Cancel order
+  /**
+   * Cancel an order
+   */
   cancelOrder: async (id: string): Promise<Order> => {
     try {
       const response = await apiClient.put(`/orders/${id}/cancel`);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error canceling order:', error);
-      throw error;
+      throw new Error(error.message || 'Failed to cancel order');
     }
   },
 };
-

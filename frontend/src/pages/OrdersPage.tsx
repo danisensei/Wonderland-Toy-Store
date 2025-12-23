@@ -1,48 +1,55 @@
-import React, { useState } from 'react';
-import { FaBox, FaClock, FaTruck, FaCheckCircle } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { FaBox, FaClock, FaTruck, FaCheckCircle, FaTimesCircle, FaSpinner, FaExclamationTriangle } from 'react-icons/fa';
 import { useAuthStore } from '../context/authStore';
-
-interface OrderItem {
-  id: string;
-  name: string;
-  quantity: number;
-  price: number;
-}
-
-interface Order {
-  id: string;
-  orderNumber: string;
-  items: OrderItem[];
-  totalAmount: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered';
-  createdAt: string;
-}
+import { orderService, Order } from '../services/orderService';
 
 const OrdersPage: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
-  const [orders] = useState<Order[]>([
-    {
-      id: '1',
-      orderNumber: 'ORD-001',
-      items: [
-        { id: '1', name: 'Robot Explorer', quantity: 1, price: 49.99 },
-        { id: '2', name: 'Soft Teddy Bear', quantity: 2, price: 24.99 },
-      ],
-      totalAmount: 99.97,
-      status: 'delivered',
-      createdAt: '2025-12-15',
-    },
-    {
-      id: '2',
-      orderNumber: 'ORD-002',
-      items: [
-        { id: '3', name: 'Chess Master', quantity: 1, price: 34.99 },
-      ],
-      totalAmount: 38.49,
-      status: 'shipped',
-      createdAt: '2025-12-20',
-    },
-  ]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(null);
+
+  // Fetch orders from API
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!isAuthenticated) {
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await orderService.getUserOrders();
+        setOrders(data);
+      } catch (err: any) {
+        console.error('Failed to fetch orders:', err);
+        setError(err.message || 'Failed to load orders');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [isAuthenticated]);
+
+  const handleCancelOrder = async (orderId: string) => {
+    if (!window.confirm('Are you sure you want to cancel this order?')) {
+      return;
+    }
+
+    setCancellingOrderId(orderId);
+    try {
+      const updatedOrder = await orderService.cancelOrder(orderId);
+      setOrders(orders.map(o => o.id === orderId ? updatedOrder : o));
+    } catch (err: any) {
+      alert(err.message || 'Failed to cancel order');
+    } finally {
+      setCancellingOrderId(null);
+    }
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -54,6 +61,8 @@ const OrdersPage: React.FC = () => {
         return <FaTruck className="text-orange-500" />;
       case 'delivered':
         return <FaCheckCircle className="text-green-500" />;
+      case 'cancelled':
+        return <FaTimesCircle className="text-red-500" />;
       default:
         return null;
     }
@@ -69,6 +78,8 @@ const OrdersPage: React.FC = () => {
         return 'bg-orange-100 text-orange-700';
       case 'delivered':
         return 'bg-green-100 text-green-700';
+      case 'cancelled':
+        return 'bg-red-100 text-red-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
@@ -84,6 +95,9 @@ const OrdersPage: React.FC = () => {
             <p className="text-gray-600 mb-6">
               Please login to view your orders.
             </p>
+            <Link to="/login" className="btn btn-primary">
+              Login
+            </Link>
           </div>
         </div>
       </div>
@@ -95,13 +109,35 @@ const OrdersPage: React.FC = () => {
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold mb-8">My Orders</h1>
 
-        {orders.length === 0 ? (
+        {/* Error State */}
+        {error && (
+          <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center gap-3 text-red-700">
+              <FaExclamationTriangle className="text-2xl flex-shrink-0" />
+              <div>
+                <h3 className="font-bold">Error Loading Orders</h3>
+                <p>{error}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex flex-col justify-center items-center h-64">
+            <FaSpinner className="text-4xl text-primary animate-spin mb-4" />
+            <p className="text-gray-600">Loading orders...</p>
+          </div>
+        ) : orders.length === 0 ? (
           <div className="card text-center py-16 max-w-md mx-auto">
             <p className="text-4xl mb-4">📦</p>
             <h2 className="text-2xl font-bold mb-4">No Orders Yet</h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-6">
               You haven't placed any orders yet. Start shopping!
             </p>
+            <Link to="/products" className="btn btn-primary">
+              Shop Now
+            </Link>
           </div>
         ) : (
           <div className="space-y-6">
@@ -125,23 +161,51 @@ const OrdersPage: React.FC = () => {
                 <div className="mb-4">
                   <h4 className="font-semibold mb-3">Items:</h4>
                   <div className="space-y-2">
-                    {order.items.map((item) => (
-                      <div key={item.id} className="flex justify-between text-sm">
-                        <span>{item.name} x {item.quantity}</span>
+                    {order.items.map((item, index) => (
+                      <div key={item.id || index} className="flex justify-between text-sm">
+                        <span>{item.name || `Product #${item.productId}`} x {item.quantity}</span>
                         <span className="font-semibold">
-                            {(item.price * item.quantity).toFixed(2)}
+                          PKR {(item.price * item.quantity).toLocaleString('en-PK', { maximumFractionDigits: 0 })}
                         </span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Order Total */}
-                <div className="flex justify-between pt-4 border-t border-gray-200">
-                  <span className="font-bold">Total:</span>
-                  <span className="text-xl font-bold text-primary">
-                    ${order.totalAmount.toFixed(2)}
-                  </span>
+                {/* Delivery Address */}
+                {order.deliveryAddress && (
+                  <div className="mb-4 text-sm text-gray-600">
+                    <span className="font-semibold">Delivery: </span>
+                    {order.deliveryAddress}
+                    {order.city && `, ${order.city}`}
+                    {order.postalCode && ` ${order.postalCode}`}
+                  </div>
+                )}
+
+                {/* Order Total & Actions */}
+                <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+                  <div>
+                    <span className="font-bold">Total: </span>
+                    <span className="text-xl font-bold text-primary">
+                      PKR {order.totalAmount.toLocaleString('en-PK', { maximumFractionDigits: 0 })}
+                    </span>
+                  </div>
+
+                  {/* Cancel button for pending/processing orders */}
+                  {(order.status === 'pending' || order.status === 'processing') && (
+                    <button
+                      onClick={() => handleCancelOrder(order.id)}
+                      disabled={cancellingOrderId === order.id}
+                      className="flex items-center gap-2 px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 disabled:opacity-50 transition"
+                    >
+                      {cancellingOrderId === order.id ? (
+                        <FaSpinner className="animate-spin" />
+                      ) : (
+                        <FaTimesCircle />
+                      )}
+                      Cancel Order
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
@@ -153,4 +217,3 @@ const OrdersPage: React.FC = () => {
 };
 
 export default OrdersPage;
-

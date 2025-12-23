@@ -1,122 +1,120 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Product } from '../services/productService';
+import { Product, productService, CreateProductData } from '../services/productService';
 
 export interface ProductStore {
   products: Product[];
+  isLoading: boolean;
+  error: string | null;
+  lastFetched: number | null;
   setProducts: (products: Product[]) => void;
-  addProduct: (product: Product) => void;
-  updateProduct: (id: string, product: Partial<Product>) => void;
-  deleteProduct: (id: string) => void;
+  fetchProducts: () => Promise<void>;
+  addProduct: (product: CreateProductData) => Promise<Product>;
+  updateProduct: (id: string, product: Partial<CreateProductData>) => Promise<Product>;
+  deleteProduct: (id: string) => Promise<void>;
   getProduct: (id: string) => Product | undefined;
   updateProductQuantity: (id: string, quantity: number) => void;
   getProductsByCategory: (category: string) => Product[];
   searchProducts: (query: string) => Product[];
+  clearError: () => void;
 }
 
-// Sample products data - same as in ProductsPage
-const INITIAL_PRODUCTS: Product[] = [
-  {
-    id: '1',
-    name: 'Robot Explorer',
-    brand: 'TechToys',
-    price: 4999.99,
-    quantity: 15,
-    description: 'Advanced robot with AI learning capabilities',
-    category: 'Electronic',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK1teoV9A4Ruk4aCQ7E4606n0_uYrdAEfgLQ&s',
-    categoryAttributes: { batteryType: 'AA', voltage: '6V' },
-  },
-  {
-    id: '2',
-    name: 'Soft Teddy Bear',
-    brand: 'CozyToys',
-    price: 1000.0,
-    quantity: 25,
-    description: 'Ultra-soft plush teddy bear with embroidered details',
-    category: 'Plush',
-    image: 'https://theflowerstudio.pk/wp-content/uploads/2017/02/high-quality-80cm-huge-teddy-bear-stuffed-plush-kids-toys-cute-wear-sweater-bear-baby-appearse.jpg_640x640.jpg',
-    categoryAttributes: { material: 'Polyester', size: 'Medium' },
-  },
-  {
-    id: '3',
-    name: 'Chess Master',
-    brand: 'GamePro',
-    price: 3200,
-    quantity: 10,
-    description: 'Classic chess set with magnetic pieces',
-    category: 'BoardGame',
-    image: 'https://m.media-amazon.com/images/I/81l0QFknYcL._AC_UF894,1000_QL80_.jpg',
-    categoryAttributes: { ageRange: '8+', numberOfPlayers: '2' },
-  },
-  {
-    id: '4',
-    name: 'Smart Robot',
-    brand: 'TechToys',
-    price: 4999,
-    quantity: 15,
-    description: 'Interactive robot with voice commands and LED display',
-    category: 'Electronic',
-    image: 'https://via.placeholder.com/300?text=Smart+Robot',
-    categoryAttributes: { batteryType: 'AA', voltage: '3V' },
-  },
-  {
-    id: '5',
-    name: 'Cuddly Teddy Bear',
-    brand: 'SoftCare',
-    price: 2499,
-    quantity: 30,
-    description: 'Super soft teddy bear perfect for hugs',
-    category: 'Plush',
-    image: 'https://via.placeholder.com/300?text=Teddy+Bear',
-    categoryAttributes: { material: 'Plush', size: 'Large' },
-  },
-  {
-    id: '6',
-    name: 'Chess Set',
-    brand: 'GameMaster',
-    price: 3499,
-    quantity: 10,
-    description: 'Professional chess set with premium wooden pieces',
-    category: 'BoardGame',
-    image: 'https://via.placeholder.com/300?text=Chess',
-    categoryAttributes: { ageRange: '10+', numberOfPlayers: '2' },
-  },
-];
-
-export const useProductStore = create<ProductStore>(
+export const useProductStore = create<ProductStore>()(
   persist(
     (set, get) => ({
-      products: INITIAL_PRODUCTS,
+      products: [],
+      isLoading: false,
+      error: null,
+      lastFetched: null,
 
       setProducts: (products) => {
-        set({ products });
+        set({ products, lastFetched: Date.now() });
       },
 
-      addProduct: (product) => {
-        set((state) => ({
-          products: [...state.products, product],
-        }));
+      // Fetch products from API
+      fetchProducts: async () => {
+        // Skip if recently fetched (within 1 minute)
+        const lastFetched = get().lastFetched;
+        if (lastFetched && Date.now() - lastFetched < 60000 && get().products.length > 0) {
+          return;
+        }
+
+        set({ isLoading: true, error: null });
+        try {
+          const products = await productService.getAllProducts();
+          set({
+            products,
+            isLoading: false,
+            error: null,
+            lastFetched: Date.now()
+          });
+        } catch (error: any) {
+          set({
+            isLoading: false,
+            error: error.message || 'Failed to fetch products'
+          });
+          throw error;
+        }
       },
 
-      updateProduct: (id, updates) => {
-        set((state) => ({
-          products: state.products.map((product) =>
-            product.id === id ? { ...product, ...updates } : product
-          ),
-        }));
+      // Add new product via API (admin)
+      addProduct: async (productData) => {
+        set({ isLoading: true, error: null });
+        try {
+          const newProduct = await productService.createProduct(productData);
+          set((state) => ({
+            products: [...state.products, newProduct],
+            isLoading: false,
+            error: null,
+          }));
+          return newProduct;
+        } catch (error: any) {
+          set({ isLoading: false, error: error.message });
+          throw error;
+        }
       },
 
-      deleteProduct: (id) => {
-        set((state) => ({
-          products: state.products.filter((product) => product.id !== id),
-        }));
+      // Update product via API (admin)
+      updateProduct: async (id, updates) => {
+        set({ isLoading: true, error: null });
+        try {
+          const updatedProduct = await productService.updateProduct(id, updates);
+          set((state) => ({
+            products: state.products.map((p) =>
+              p.id === id ? updatedProduct : p
+            ),
+            isLoading: false,
+            error: null,
+          }));
+          return updatedProduct;
+        } catch (error: any) {
+          set({ isLoading: false, error: error.message });
+          throw error;
+        }
       },
 
+      // Delete product via API (admin)
+      deleteProduct: async (id) => {
+        set({ isLoading: true, error: null });
+        try {
+          await productService.deleteProduct(id);
+          set((state) => ({
+            products: state.products.filter((p) => p.id !== id),
+            isLoading: false,
+            error: null,
+          }));
+        } catch (error: any) {
+          set({ isLoading: false, error: error.message });
+          throw error;
+        }
+      },
+
+      // Get single product from store
       getProduct: (id) => {
         return get().products.find((product) => product.id === id);
       },
 
+      // Update product quantity locally (for cart operations)
       updateProductQuantity: (id, quantity) => {
         set((state) => ({
           products: state.products.map((product) =>
@@ -125,10 +123,12 @@ export const useProductStore = create<ProductStore>(
         }));
       },
 
+      // Filter products by category locally
       getProductsByCategory: (category) => {
         return get().products.filter((product) => product.category === category);
       },
 
+      // Search products locally
       searchProducts: (query) => {
         const lowerQuery = query.toLowerCase();
         return get().products.filter(
@@ -138,10 +138,18 @@ export const useProductStore = create<ProductStore>(
             product.description.toLowerCase().includes(lowerQuery)
         );
       },
+
+      // Clear error
+      clearError: () => {
+        set({ error: null });
+      },
     }),
     {
       name: 'product-store',
+      partialize: (state) => ({
+        products: state.products,
+        lastFetched: state.lastFetched,
+      }),
     }
   )
 );
-

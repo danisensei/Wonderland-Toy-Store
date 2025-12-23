@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaEnvelope, FaLock } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaSpinner } from 'react-icons/fa';
 import { useAuthStore } from '../context/authStore';
 
 const LoginPage: React.FC = () => {
@@ -10,8 +10,8 @@ const LoginPage: React.FC = () => {
     password: '',
   });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const setUser = useAuthStore((state) => state.setUser);
+
+  const { login, isLoading } = useAuthStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -21,30 +21,20 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setError('');
 
     // Validation
     if (!formData.email || !formData.password) {
       setError('Email and password are required');
-      setLoading(false);
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      const user = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: formData.email.split('@')[0],
-        email: formData.email,
-        role: 'customer' as const,
-        createdAt: new Date().toISOString(),
-      };
-
-      setUser(user);
-      localStorage.setItem('authToken', 'mock-token-' + Math.random());
+    try {
+      await login(formData.email, formData.password);
       navigate('/');
-      setLoading(false);
-    }, 1000);
+    } catch (err: any) {
+      setError(err.message || 'Login failed. Please check your credentials.');
+    }
   };
 
   return (
@@ -78,6 +68,7 @@ const LoginPage: React.FC = () => {
                     onChange={handleChange}
                     placeholder="john@example.com"
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -94,6 +85,7 @@ const LoginPage: React.FC = () => {
                     onChange={handleChange}
                     placeholder="••••••••"
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -112,10 +104,17 @@ const LoginPage: React.FC = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full btn btn-primary py-3 mt-6 disabled:opacity-50"
+                disabled={isLoading}
+                className="w-full btn btn-primary py-3 mt-6 disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {loading ? 'Logging in...' : 'Login'}
+                {isLoading ? (
+                  <>
+                    <FaSpinner className="animate-spin" />
+                    Logging in...
+                  </>
+                ) : (
+                  'Login'
+                )}
               </button>
             </form>
 
@@ -129,9 +128,9 @@ const LoginPage: React.FC = () => {
 
             {/* Demo Account Info */}
             <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
-              <p className="font-semibold mb-2">Demo Account:</p>
-              <p>Email: demo@example.com</p>
-              <p>Password: demo123</p>
+              <p className="font-semibold mb-2">Demo Accounts:</p>
+              <p><strong>Customer:</strong> demo@example.com / demo123</p>
+              <p><strong>Admin:</strong> admin@wonderland.com / admin123</p>
             </div>
           </div>
         </div>
@@ -141,4 +140,3 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
-

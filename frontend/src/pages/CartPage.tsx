@@ -1,22 +1,77 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaTrash, FaArrowLeft, FaCheckCircle } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaTrash, FaArrowLeft, FaCheckCircle, FaSpinner } from 'react-icons/fa';
 import { useCartStore } from '../context/cartStore';
+import { useAuthStore } from '../context/authStore';
+import { orderService } from '../services/orderService';
 
 const CartPage: React.FC = () => {
+  const navigate = useNavigate();
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
   const [showCheckout, setShowCheckout] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [checkoutData, setCheckoutData] = useState({
+    fullName: '',
+    email: '',
+    deliveryAddress: '',
+    city: '',
+    postalCode: '',
+  });
 
-  const handleCheckout = () => {
-    if (items.length > 0) {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCheckoutData(prev => ({ ...prev, [name]: value }));
+    setError(null);
+  };
+
+  const handleCheckout = async () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    // Validate checkout data
+    if (!checkoutData.deliveryAddress || !checkoutData.city) {
+      setError('Please fill in the delivery address and city');
+      return;
+    }
+
+    if (items.length === 0) {
+      setError('Your cart is empty');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // Create order via API
+      await orderService.createOrder({
+        items: items.map(item => ({
+          productId: item.id,
+          quantity: item.quantity,
+        })),
+        deliveryAddress: checkoutData.deliveryAddress,
+        city: checkoutData.city,
+        postalCode: checkoutData.postalCode,
+      });
+
       setOrderPlaced(true);
-      // Here you would typically call an API to create the order
+
+      // Clear cart and redirect after delay
       setTimeout(() => {
         clearCart();
         setOrderPlaced(false);
         setShowCheckout(false);
+        navigate('/orders');
       }, 2000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to place order. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -30,9 +85,7 @@ const CartPage: React.FC = () => {
             <p className="text-gray-600 mb-6">
               Thank you for your purchase. Your order has been confirmed.
             </p>
-            <Link to="/products" className="btn btn-primary">
-              Continue Shopping
-            </Link>
+            <p className="text-sm text-gray-500">Redirecting to orders page...</p>
           </div>
         </div>
       </div>
@@ -136,6 +189,12 @@ const CartPage: React.FC = () => {
               <div className="card sticky top-8">
                 <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
 
+                {error && (
+                  <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-lg text-red-700 text-sm">
+                    {error}
+                  </div>
+                )}
+
                 <div className="space-y-4 pb-4 border-b border-gray-200">
                   <div className="flex justify-between">
                     <span>Subtotal ({items.reduce((t, i) => t + i.quantity, 0)} items)</span>
@@ -164,47 +223,79 @@ const CartPage: React.FC = () => {
 
                 {!showCheckout ? (
                   <button
-                    onClick={() => setShowCheckout(true)}
+                    onClick={() => {
+                      if (!isAuthenticated) {
+                        navigate('/login');
+                      } else {
+                        setShowCheckout(true);
+                      }
+                    }}
                     className="w-full btn btn-primary py-3 text-lg"
                   >
-                    Proceed to Checkout
+                    {isAuthenticated ? 'Proceed to Checkout' : 'Login to Checkout'}
                   </button>
                 ) : (
                   <div className="space-y-4">
                     <input
                       type="text"
+                      name="fullName"
+                      value={checkoutData.fullName}
+                      onChange={handleInputChange}
                       placeholder="Full Name"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
                     />
                     <input
                       type="email"
+                      name="email"
+                      value={checkoutData.email}
+                      onChange={handleInputChange}
                       placeholder="Email Address"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
                     />
                     <input
                       type="text"
-                      placeholder="Delivery Address"
+                      name="deliveryAddress"
+                      value={checkoutData.deliveryAddress}
+                      onChange={handleInputChange}
+                      placeholder="Delivery Address *"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                      required
                     />
                     <input
                       type="text"
-                      placeholder="City"
+                      name="city"
+                      value={checkoutData.city}
+                      onChange={handleInputChange}
+                      placeholder="City *"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                      required
                     />
                     <input
                       type="text"
+                      name="postalCode"
+                      value={checkoutData.postalCode}
+                      onChange={handleInputChange}
                       placeholder="Postal Code"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
                     />
                     <button
                       onClick={handleCheckout}
-                      className="w-full btn btn-primary py-3 text-lg"
+                      disabled={isSubmitting}
+                      className="w-full btn btn-primary py-3 text-lg disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      Place Order
+                      {isSubmitting ? (
+                        <>
+                          <FaSpinner className="animate-spin" />
+                          Placing Order...
+                        </>
+                      ) : (
+                        'Place Order'
+                      )}
                     </button>
                     <button
                       onClick={() => setShowCheckout(false)}
                       className="w-full btn btn-outline"
+                      disabled={isSubmitting}
                     >
                       Back
                     </button>
@@ -226,4 +317,3 @@ const CartPage: React.FC = () => {
 };
 
 export default CartPage;
-

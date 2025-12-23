@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaLock, FaEnvelope, FaEye, FaEyeSlash, FaChartBar } from 'react-icons/fa';
+import { FaLock, FaEnvelope, FaEye, FaEyeSlash, FaChartBar, FaSpinner } from 'react-icons/fa';
 import { useAuthStore } from '../context/authStore';
 
 const AdminLogin: React.FC = () => {
@@ -8,25 +8,24 @@ const AdminLogin: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const adminLogin = useAuthStore((state) => state.adminLogin);
+
+  const { adminLogin, isLoading } = useAuthStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true);
-    console.log('Login attempt:', { email, password });
+
+    if (!email || !password) {
+      setError('Email and password are required');
+      return;
+    }
 
     try {
       await adminLogin(email, password);
-      console.log('Login successful');
       navigate('/admin');
     } catch (err: any) {
-      console.error('Login error:', err);
-      setError(err.message || 'Login failed. Please try again.');
-    } finally {
-      setIsLoading(false);
+      setError(err.message || 'Login failed. Please check your credentials.');
     }
   };
 
@@ -77,6 +76,7 @@ const AdminLogin: React.FC = () => {
                   placeholder="admin@wonderland.com"
                   className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition"
                   required
+                  disabled={isLoading}
                 />
               </div>
               <p className="text-xs text-gray-500">Default: admin@wonderland.com</p>
@@ -96,6 +96,7 @@ const AdminLogin: React.FC = () => {
                   placeholder="Enter password"
                   className="w-full pl-12 pr-12 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition"
                   required
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
@@ -116,7 +117,7 @@ const AdminLogin: React.FC = () => {
             >
               {isLoading ? (
                 <>
-                  <span className="animate-spin">⏳</span>
+                  <FaSpinner className="animate-spin" />
                   Logging in...
                 </>
               ) : (
@@ -151,4 +152,3 @@ const AdminLogin: React.FC = () => {
 };
 
 export default AdminLogin;
-
