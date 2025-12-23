@@ -1,10 +1,13 @@
 """
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Authentication Pydantic schemas.
 """
 from pydantic import BaseModel, EmailStr
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 Authentication Schemas - Pydantic models for auth requests/responses
@@ -12,6 +15,9 @@ Authentication Schemas - Pydantic models for auth requests/responses
 
 from pydantic import BaseModel, EmailStr, Field
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -19,6 +25,7 @@ from typing import Optional
 
 
 class UserCreate(BaseModel):
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     email: EmailStr
@@ -39,6 +46,8 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     user_id: Optional[int] = None
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     """Schema for user registration request."""
@@ -96,6 +105,9 @@ class TokenData(BaseModel):
     user_id: Optional[int] = None
     email: Optional[str] = None
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

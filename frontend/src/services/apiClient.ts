@@ -25,6 +25,7 @@ apiClient.interceptors.response.use(
     if (error.response) {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       if (error.response.status === 401) {
         localStorage.removeItem('authToken');
       }
@@ -34,6 +35,8 @@ apiClient.interceptors.response.use(
       error.message = message;
     } else if (error.request) {
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
       // Server responded with error status
@@ -49,6 +52,9 @@ apiClient.interceptors.response.use(
     } else if (error.request) {
       // Request made but no response received
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

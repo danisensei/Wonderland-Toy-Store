@@ -1,6 +1,7 @@
 """
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Order Pydantic schemas.
 """
 from pydantic import BaseModel
@@ -42,6 +43,8 @@ class OrderResponse(BaseModel):
     createdAt: str
     updatedAt: str
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 Order Schemas - Pydantic models for order requests/responses
@@ -113,6 +116,9 @@ class OrderResponse(BaseModel):
     class Config:
         from_attributes = True
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

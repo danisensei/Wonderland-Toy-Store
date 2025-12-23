@@ -1,6 +1,7 @@
 """
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Seed data script to populate the database with sample products and users.
 """
 from database import SessionLocal, engine, Base
@@ -12,6 +13,8 @@ def seed_database():
     """Seed the database with initial data."""
     Base.metadata.create_all(bind=engine)
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 Seed Data Script - Populate database with sample products and admin user
@@ -34,6 +37,9 @@ def seed_database():
     # Initialize database tables
     init_db()
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -41,6 +47,7 @@ def seed_database():
     db = SessionLocal()
     
     try:
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
         existing_users = db.query(User).count()
@@ -63,6 +70,8 @@ def seed_database():
             name="Demo Customer",
             hashed_password=hash_password("demo123"),
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         # Check if data already exists
@@ -88,6 +97,9 @@ def seed_database():
             name="Demo User",
             password_hash=get_password_hash("demo123"),
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -95,6 +107,7 @@ def seed_database():
         )
         db.add(demo_user)
         
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
         electronic_toys = [
@@ -208,6 +221,8 @@ def seed_database():
         print(f"❌ Error seeding database: {e}")
         db.rollback()
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         # Sample Products - Electronic Toys
@@ -359,6 +374,9 @@ def seed_database():
         db.rollback()
         raise
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

@@ -1,6 +1,7 @@
 """
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Product routes.
 """
 from fastapi import APIRouter, Depends, HTTPException, status, Query
@@ -92,6 +93,8 @@ async def get_product(product_id: int, db: Session = Depends(get_db)):
     """Get a single product by ID."""
     product = db.query(DBProduct).filter(DBProduct.id == product_id).first()
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 Product Routes - CRUD operations for products
@@ -199,6 +202,9 @@ async def get_product(product_id: int, db: Session = Depends(get_db)):
     product = db.query(DBProduct).filter(DBProduct.id == product_id).first()
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -208,6 +214,7 @@ async def get_product(product_id: int, db: Session = Depends(get_db)):
             detail="Product not found"
         )
     
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     return ProductResponse(
@@ -232,6 +239,8 @@ async def create_product(
 ):
     """Create a new product (admin only)."""
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     return product.to_dict()
@@ -260,6 +269,9 @@ async def create_product(
         category_attrs = product_data.categoryAttributes.model_dump(exclude_none=True)
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -271,11 +283,14 @@ async def create_product(
         description=product_data.description,
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         category=product_data.category,
         image=product_data.image,
         category_attributes=product_data.categoryAttributes or {}
     )
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         image_url=product_data.image,
@@ -284,6 +299,9 @@ async def create_product(
     )
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -291,6 +309,7 @@ async def create_product(
     db.commit()
     db.refresh(new_product)
     
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     return ProductResponse(
@@ -311,11 +330,16 @@ async def create_product(
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     return new_product.to_dict()
 
 
 @router.put("/{product_id}", response_model=dict)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -325,11 +349,14 @@ async def update_product(
     db: Session = Depends(get_db),
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     current_user: User = Depends(get_current_admin_user)
 ):
     """Update a product (admin only)."""
     product = db.query(DBProduct).filter(DBProduct.id == product_id).first()
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     current_user: User = Depends(get_current_admin)
@@ -349,6 +376,9 @@ async def update_product(
     product = db.query(DBProduct).filter(DBProduct.id == product_id).first()
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -360,6 +390,7 @@ async def update_product(
     
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     update_data = product_data.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         if key == "categoryAttributes":
@@ -367,6 +398,8 @@ async def update_product(
         else:
             setattr(product, key, value)
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     # Update fields that are provided
@@ -380,6 +413,9 @@ async def update_product(
         else:
             setattr(product, field, value)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -387,6 +423,7 @@ async def update_product(
     db.commit()
     db.refresh(product)
     
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     return ProductResponse(
@@ -414,6 +451,8 @@ async def delete_product(
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     return product.to_dict()
 
 
@@ -434,6 +473,9 @@ async def delete_product(
     product = db.query(DBProduct).filter(DBProduct.id == product_id).first()
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -448,7 +490,11 @@ async def delete_product(
     
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     return {"message": "Product deleted successfully"}
+=======
+    return None
+>>>>>>> Stashed changes
 =======
     return None
 >>>>>>> Stashed changes

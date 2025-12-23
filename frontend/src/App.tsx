@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useAuthStore } from './context/authStore';
 
 // Layout
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -51,6 +54,9 @@ function App() {
   }, [checkAuth]);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

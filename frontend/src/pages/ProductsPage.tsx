@@ -19,6 +19,10 @@ const ProductsPage: React.FC = () => {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  // Fetch products from API
+>>>>>>> Stashed changes
 =======
   // Fetch products from API
 >>>>>>> Stashed changes
@@ -53,6 +57,10 @@ const ProductsPage: React.FC = () => {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  // Filter and sort products
+>>>>>>> Stashed changes
 =======
   // Filter and sort products
 >>>>>>> Stashed changes
@@ -131,11 +139,14 @@ const ProductsPage: React.FC = () => {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         {error && (
           <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
             <div className="flex items-center gap-3 text-red-700">
               <FaExclamationTriangle className="text-2xl flex-shrink-0" />
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         {/* Error State */}
@@ -144,6 +155,9 @@ const ProductsPage: React.FC = () => {
             <div className="flex items-center gap-3 text-red-700">
               <FaExclamationTriangle className="text-2xl" />
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -160,7 +174,10 @@ const ProductsPage: React.FC = () => {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         {/* Main Content */}

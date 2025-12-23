@@ -1,8 +1,14 @@
 """
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Authentication routes.
 """
+=======
+Authentication Routes - Register, Login, and Get Current User
+"""
+
+>>>>>>> Stashed changes
 =======
 Authentication Routes - Register, Login, and Get Current User
 """
@@ -19,6 +25,7 @@ from sqlalchemy.orm import Session
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 from utils.deps import get_db, get_current_user
 from utils.security import hash_password, verify_password, create_access_token
 from schemas.auth import UserCreate, UserLogin, Token
@@ -32,6 +39,8 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     """Register a new user."""
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import sys
@@ -62,6 +71,9 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     """
     # Check if email already exists
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -74,6 +86,7 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     hashed_pw = hash_password(user_data.password)
     new_user = User(
         email=user_data.email,
@@ -82,6 +95,8 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
         role="customer"
     )
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     # Create new user
@@ -94,6 +109,9 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     )
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -103,6 +121,7 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     access_token = create_access_token(data={"sub": str(new_user.id)})
     
     return {
@@ -110,6 +129,8 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
         "token_type": "bearer",
         "user": {
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     # Create access token
@@ -123,6 +144,9 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
         token_type="bearer",
         user={
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -130,6 +154,7 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
             "email": new_user.email,
             "name": new_user.name,
             "role": new_user.role,
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
             "createdAt": new_user.created_at.isoformat() if new_user.created_at else ""
@@ -146,6 +171,8 @@ async def login_oauth2(
     user = db.query(User).filter(User.email == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
             "createdAt": new_user.created_at.isoformat() if new_user.created_at else None
@@ -174,6 +201,9 @@ async def login(
     
     if not user or not verify_password(form_data.password, user.password_hash):
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -183,6 +213,7 @@ async def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     access_token = create_access_token(data={"sub": str(user.id)})
@@ -208,6 +239,8 @@ async def login_json(user_data: UserLogin, db: Session = Depends(get_db)):
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     # Create access token
     access_token = create_access_token(data={
         "user_id": user.id,
@@ -219,6 +252,9 @@ async def login_json(user_data: UserLogin, db: Session = Depends(get_db)):
         token_type="bearer",
         user={
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -226,6 +262,7 @@ async def login_json(user_data: UserLogin, db: Session = Depends(get_db)):
             "email": user.email,
             "name": user.name,
             "role": user.role,
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
             "createdAt": user.created_at.isoformat() if user.created_at else ""
@@ -237,6 +274,8 @@ async def login_json(user_data: UserLogin, db: Session = Depends(get_db)):
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
     """Get current authenticated user info."""
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
             "createdAt": user.created_at.isoformat() if user.created_at else None
@@ -297,6 +336,9 @@ async def get_me(current_user: User = Depends(get_current_user)):
         UserResponse: Current user's information
     """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -307,7 +349,11 @@ async def get_me(current_user: User = Depends(get_current_user)):
         role=current_user.role,
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         createdAt=current_user.created_at.isoformat() if current_user.created_at else ""
+=======
+        createdAt=current_user.created_at.isoformat() if current_user.created_at else None
+>>>>>>> Stashed changes
 =======
         createdAt=current_user.created_at.isoformat() if current_user.created_at else None
 >>>>>>> Stashed changes

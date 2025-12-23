@@ -1,6 +1,7 @@
 """
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 User Pydantic schemas.
 """
 from pydantic import BaseModel, EmailStr
@@ -19,6 +20,8 @@ class UserUpdate(BaseModel):
     name: Optional[str] = None
     email: Optional[EmailStr] = None
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 User Schemas - Pydantic models for user requests/responses
@@ -63,6 +66,9 @@ class UserUpdate(BaseModel):
             }
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

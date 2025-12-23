@@ -1,6 +1,7 @@
 """
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 FastAPI dependencies for authentication and database sessions.
 """
 from fastapi import Depends, HTTPException, status
@@ -17,6 +18,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=Fals
 def get_db():
     """Get database session dependency."""
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 Dependencies - FastAPI dependency injection for auth and database
@@ -49,6 +52,9 @@ def get_db() -> Generator:
         Session: SQLAlchemy database session
     """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -62,6 +68,7 @@ def get_db() -> Generator:
 async def get_current_user(
     token: Optional[str] = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 ):
@@ -99,6 +106,8 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 ) -> User:
@@ -139,6 +148,9 @@ async def get_current_user(
     if user is None:
         raise credentials_exception
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -148,11 +160,14 @@ async def get_current_user(
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 async def get_current_admin_user(
     current_user = Depends(get_current_user)
 ):
     """Get the current user and verify they are an admin."""
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 async def get_current_user_optional(
@@ -201,6 +216,9 @@ async def get_current_admin(
         HTTPException: If user is not an admin
     """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -210,6 +228,7 @@ async def get_current_admin(
             detail="Admin access required"
         )
     return current_user
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
@@ -233,6 +252,8 @@ async def get_optional_user(
         return None
     
     return db.query(User).filter(User.id == int(user_id)).first()
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======

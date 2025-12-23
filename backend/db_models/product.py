@@ -1,11 +1,14 @@
 """
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Product database model.
 """
 from sqlalchemy import Column, Integer, String, Float, DateTime, JSON
 from sqlalchemy.sql import func
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 Product Database Model - SQLAlchemy model for products
@@ -19,6 +22,9 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -26,6 +32,7 @@ from database import Base
 
 
 class DBProduct(Base):
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     __tablename__ = "products"
@@ -45,6 +52,8 @@ class DBProduct(Base):
     def __repr__(self):
         return f"<DBProduct(id={self.id}, name='{self.name}', category='{self.category}')>"
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     """
@@ -111,6 +120,9 @@ class DBProduct(Base):
             "updated_at": self.updated_at.isoformat() if self.updated_at else None
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

@@ -1,6 +1,7 @@
 """
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 User database model.
 """
 from sqlalchemy import Column, Integer, String, DateTime
@@ -10,6 +11,8 @@ from database import Base
 
 class User(Base):
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 User Database Model - SQLAlchemy model for user accounts
@@ -46,6 +49,9 @@ class User(Base):
         updated_at: Last update timestamp
     """
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -56,6 +62,7 @@ class User(Base):
     name = Column(String(255), nullable=False)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     hashed_password = Column(String(255), nullable=False)
     role = Column(String(50), default="customer")  # customer or admin
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -64,6 +71,8 @@ class User(Base):
     def __repr__(self):
         return f"<User(id={self.id}, email='{self.email}', role='{self.role}')>"
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     password_hash = Column(String(255), nullable=False)
@@ -77,6 +86,9 @@ class User(Base):
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email}, role={self.role})>"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

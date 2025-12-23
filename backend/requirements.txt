@@ -1,6 +1,7 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 fastapi>=0.104.0
 uvicorn>=0.24.0
 sqlalchemy>=2.0.0
@@ -11,6 +12,8 @@ email-validator>=2.0.0
 python-dotenv>=1.0.0
 bcrypt>=4.0.0
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -29,6 +32,9 @@ python-multipart>=0.0.9
 email-validator>=2.1.0
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
