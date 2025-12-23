@@ -24,7 +24,10 @@ const CartPage: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCheckoutData(prev => ({ ...prev, [name]: value }));
+<<<<<<< Updated upstream
     setError(null);
+=======
+>>>>>>> Stashed changes
   };
 
   const handleCheckout = async () => {
@@ -33,6 +36,10 @@ const CartPage: React.FC = () => {
       return;
     }
 
+<<<<<<< Updated upstream
+=======
+    // Validate checkout data
+>>>>>>> Stashed changes
     if (!checkoutData.deliveryAddress || !checkoutData.city) {
       setError('Please fill in the delivery address and city');
       return;
@@ -47,6 +54,10 @@ const CartPage: React.FC = () => {
     setError(null);
 
     try {
+<<<<<<< Updated upstream
+=======
+      // Create order via API
+>>>>>>> Stashed changes
       await orderService.createOrder({
         items: items.map(item => ({
           productId: item.id,
@@ -59,6 +70,10 @@ const CartPage: React.FC = () => {
 
       setOrderPlaced(true);
 
+<<<<<<< Updated upstream
+=======
+      // Clear cart and redirect after delay
+>>>>>>> Stashed changes
       setTimeout(() => {
         clearCart();
         setOrderPlaced(false);

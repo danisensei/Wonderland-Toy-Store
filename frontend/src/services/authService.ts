@@ -1,5 +1,6 @@
 import apiClient from './apiClient';
 
+<<<<<<< Updated upstream
 export interface User {
     id: string;
     email: string;
@@ -12,6 +13,18 @@ export interface LoginResponse {
     access_token: string;
     token_type: string;
     user: User;
+=======
+export interface LoginResponse {
+    access_token: string;
+    token_type: string;
+    user: {
+        id: string;
+        email: string;
+        name: string;
+        role: 'customer' | 'admin';
+        createdAt: string;
+    };
+>>>>>>> Stashed changes
 }
 
 export interface RegisterData {
@@ -25,12 +38,25 @@ export interface LoginData {
     password: string;
 }
 
+<<<<<<< Updated upstream
 export interface ProfileUpdateData {
     name?: string;
     email?: string;
 }
 
 export const authService = {
+=======
+export interface User {
+    id: string;
+    email: string;
+    name: string;
+    role: 'customer' | 'admin';
+    createdAt: string;
+}
+
+export const authService = {
+    // Register new user
+>>>>>>> Stashed changes
     register: async (data: RegisterData): Promise<LoginResponse> => {
         try {
             const response = await apiClient.post('/auth/register', data);
@@ -41,6 +67,10 @@ export const authService = {
         }
     },
 
+<<<<<<< Updated upstream
+=======
+    // Login with email and password
+>>>>>>> Stashed changes
     login: async (data: LoginData): Promise<LoginResponse> => {
         try {
             const response = await apiClient.post('/auth/login/json', data);
@@ -51,6 +81,10 @@ export const authService = {
         }
     },
 
+<<<<<<< Updated upstream
+=======
+    // Get current user info
+>>>>>>> Stashed changes
     getCurrentUser: async (): Promise<User> => {
         try {
             const response = await apiClient.get('/auth/me');
@@ -61,9 +95,16 @@ export const authService = {
         }
     },
 
+<<<<<<< Updated upstream
     updateProfile: async (data: ProfileUpdateData): Promise<User> => {
         try {
             const response = await apiClient.put('/users/me', data);
+=======
+    // Update user profile
+    updateProfile: async (data: { name?: string; email?: string }): Promise<User> => {
+        try {
+            const response = await apiClient.put('/users/profile', data);
+>>>>>>> Stashed changes
             return response.data;
         } catch (error: any) {
             console.error('Update profile error:', error);
@@ -71,18 +112,34 @@ export const authService = {
         }
     },
 
+<<<<<<< Updated upstream
+=======
+    // Logout - clear local storage
+>>>>>>> Stashed changes
     logout: (): void => {
         localStorage.removeItem('authToken');
     },
 
+<<<<<<< Updated upstream
+=======
+    // Check if user is authenticated
+>>>>>>> Stashed changes
     isAuthenticated: (): boolean => {
         return !!localStorage.getItem('authToken');
     },
 
+<<<<<<< Updated upstream
+=======
+    // Get stored token
+>>>>>>> Stashed changes
     getToken: (): string | null => {
         return localStorage.getItem('authToken');
     },
 
+<<<<<<< Updated upstream
+=======
+    // Store token
+>>>>>>> Stashed changes
     setToken: (token: string): void => {
         localStorage.setItem('authToken', token);
     },

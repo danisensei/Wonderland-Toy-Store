@@ -9,7 +9,11 @@ export interface Product {
   description: string;
   category: 'Electronic' | 'Plush' | 'BoardGame';
   image: string;
+<<<<<<< Updated upstream
   in_stock?: boolean;
+=======
+  in_stock: boolean;
+>>>>>>> Stashed changes
   categoryAttributes?: {
     batteryType?: string;
     voltage?: string;
@@ -27,6 +31,7 @@ export interface ProductFilters {
   search?: string;
   minPrice?: number;
   maxPrice?: number;
+<<<<<<< Updated upstream
 }
 
 export interface CreateProductData {
@@ -41,6 +46,12 @@ export interface CreateProductData {
 }
 
 export const productService = {
+=======
+}
+
+export const productService = {
+  // Get all products with optional filtering
+>>>>>>> Stashed changes
   getAllProducts: async (filters?: ProductFilters): Promise<Product[]> => {
     try {
       let url = '/products';
@@ -95,7 +106,12 @@ export const productService = {
     }
   },
 
+<<<<<<< Updated upstream
   createProduct: async (productData: CreateProductData): Promise<Product> => {
+=======
+  // Create product (admin only)
+  createProduct: async (productData: Omit<Product, 'id' | 'in_stock' | 'created_at' | 'updated_at'>): Promise<Product> => {
+>>>>>>> Stashed changes
     try {
       const response = await apiClient.post('/products', productData);
       return response.data;
@@ -105,7 +121,12 @@ export const productService = {
     }
   },
 
+<<<<<<< Updated upstream
   updateProduct: async (id: string, productData: Partial<CreateProductData>): Promise<Product> => {
+=======
+  // Update product (admin only)
+  updateProduct: async (id: string, productData: Partial<Product>): Promise<Product> => {
+>>>>>>> Stashed changes
     try {
       const response = await apiClient.put(`/products/${id}`, productData);
       return response.data;
@@ -115,6 +136,10 @@ export const productService = {
     }
   },
 
+<<<<<<< Updated upstream
+=======
+  // Delete product (admin only)
+>>>>>>> Stashed changes
   deleteProduct: async (id: string): Promise<void> => {
     try {
       await apiClient.delete(`/products/${id}`);

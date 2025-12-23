@@ -1,8 +1,12 @@
 import React, { useEffect } from 'react';
+<<<<<<< Updated upstream
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useAuthStore } from './context/authStore';
 
 // Layout
+=======
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+>>>>>>> Stashed changes
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -15,6 +19,7 @@ import OrdersPage from './pages/OrdersPage';
 import ProfilePage from './pages/ProfilePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+<<<<<<< Updated upstream
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -26,6 +31,23 @@ const App: React.FC = () => {
     checkAuth();
   }, [checkAuth]);
 
+=======
+import ProfilePage from './pages/ProfilePage';
+import OrdersPage from './pages/OrdersPage';
+import FAQPage from './pages/FAQPage';
+import { useAuthStore } from './context/authStore';
+
+function App() {
+  const { checkAuth, isAuthenticated } = useAuthStore();
+
+  // Check authentication status on app load
+  useEffect(() => {
+    if (localStorage.getItem('authToken')) {
+      checkAuth();
+    }
+  }, [checkAuth]);
+
+>>>>>>> Stashed changes
   return (
     <BrowserRouter>
       <div className="min-h-screen flex flex-col">

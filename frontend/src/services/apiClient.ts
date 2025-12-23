@@ -23,6 +23,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
+<<<<<<< Updated upstream
       if (error.response.status === 401) {
         localStorage.removeItem('authToken');
       }
@@ -31,6 +32,20 @@ apiClient.interceptors.response.use(
         'An error occurred';
       error.message = message;
     } else if (error.request) {
+=======
+      // Server responded with error status
+      if (error.response.status === 401) {
+        // Token expired or invalid - clear auth state
+        localStorage.removeItem('authToken');
+        // Optionally redirect to login
+        // window.location.href = '/login';
+      }
+      // Extract error message from response
+      const message = error.response.data?.detail || error.response.data?.message || 'An error occurred';
+      error.message = message;
+    } else if (error.request) {
+      // Request made but no response received
+>>>>>>> Stashed changes
       error.message = 'Unable to connect to server. Please check if the backend is running.';
     }
     return Promise.reject(error);

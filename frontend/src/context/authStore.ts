@@ -1,5 +1,8 @@
 import { create } from 'zustand';
+<<<<<<< Updated upstream
 import { persist } from 'zustand/middleware';
+=======
+>>>>>>> Stashed changes
 import { authService, User, LoginResponse } from '../services/authService';
 
 export interface AuthStore {
@@ -12,6 +15,7 @@ export interface AuthStore {
   setToken: (token: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, name: string, password: string) => Promise<void>;
+<<<<<<< Updated upstream
   adminLogin: (email: string, password: string) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
@@ -27,11 +31,25 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
+=======
+  logout: () => void;
+  checkAuth: () => Promise<void>;
+  clearError: () => void;
+}
+
+export const useAuthStore = create<AuthStore>((set, get) => ({
+  user: null,
+  token: localStorage.getItem('authToken'),
+  isAuthenticated: !!localStorage.getItem('authToken'),
+  isLoading: false,
+  error: null,
+>>>>>>> Stashed changes
 
       setUser: (user) => {
         set({ user, isAuthenticated: !!user });
       },
 
+<<<<<<< Updated upstream
       setToken: (token) => {
         if (token) {
           localStorage.setItem('authToken', token);
@@ -164,4 +182,108 @@ export const useAuthStore = create<AuthStore>()(
   )
 );
 
+=======
+  setToken: (token) => {
+    if (token) {
+      localStorage.setItem('authToken', token);
+    } else {
+      localStorage.removeItem('authToken');
+    }
+    set({ token });
+  },
+
+  login: async (email: string, password: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response: LoginResponse = await authService.login({ email, password });
+
+      // Store token
+      localStorage.setItem('authToken', response.access_token);
+
+      // Update state
+      set({
+        user: response.user,
+        token: response.access_token,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      });
+    } catch (error: any) {
+      set({
+        isLoading: false,
+        error: error.message || 'Login failed',
+        isAuthenticated: false,
+      });
+      throw error;
+    }
+  },
+
+  register: async (email: string, name: string, password: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response: LoginResponse = await authService.register({ email, name, password });
+
+      // Store token
+      localStorage.setItem('authToken', response.access_token);
+
+      // Update state
+      set({
+        user: response.user,
+        token: response.access_token,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      });
+    } catch (error: any) {
+      set({
+        isLoading: false,
+        error: error.message || 'Registration failed',
+        isAuthenticated: false,
+      });
+      throw error;
+    }
+  },
+
+  logout: () => {
+    localStorage.removeItem('authToken');
+    set({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      error: null,
+    });
+  },
+
+  checkAuth: async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      set({ isAuthenticated: false, user: null });
+      return;
+    }
+
+    try {
+      const user = await authService.getCurrentUser();
+      set({
+        user,
+        isAuthenticated: true,
+        token,
+      });
+    } catch (error) {
+      // Token is invalid or expired
+      localStorage.removeItem('authToken');
+      set({
+        user: null,
+        token: null,
+        isAuthenticated: false,
+      });
+    }
+  },
+
+  clearError: () => {
+    set({ error: null });
+  },
+}));
+
+// Export User type for convenience
+>>>>>>> Stashed changes
 export type { User };

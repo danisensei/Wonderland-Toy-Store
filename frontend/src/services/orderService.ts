@@ -30,6 +30,10 @@ export interface CreateOrderData {
 }
 
 export const orderService = {
+<<<<<<< Updated upstream
+=======
+  // Create new order
+>>>>>>> Stashed changes
   createOrder: async (orderData: CreateOrderData): Promise<Order> => {
     try {
       const response = await apiClient.post('/orders', orderData);

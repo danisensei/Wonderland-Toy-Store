@@ -17,6 +17,10 @@ const ProductsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState('name');
 
+<<<<<<< Updated upstream
+=======
+  // Fetch products from API
+>>>>>>> Stashed changes
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -35,6 +39,7 @@ const ProductsPage: React.FC = () => {
     fetchProducts();
   }, []);
 
+  // Update category from URL params
   useEffect(() => {
     const categoryParam = searchParams.get('category');
     if (categoryParam) {
@@ -42,6 +47,10 @@ const ProductsPage: React.FC = () => {
     }
   }, [searchParams]);
 
+<<<<<<< Updated upstream
+=======
+  // Filter and sort products
+>>>>>>> Stashed changes
   useEffect(() => {
     let filtered = [...products];
 
@@ -112,10 +121,18 @@ const ProductsPage: React.FC = () => {
           </div>
         </div>
 
+<<<<<<< Updated upstream
         {error && (
           <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
             <div className="flex items-center gap-3 text-red-700">
               <FaExclamationTriangle className="text-2xl flex-shrink-0" />
+=======
+        {/* Error State */}
+        {error && (
+          <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center gap-3 text-red-700">
+              <FaExclamationTriangle className="text-2xl" />
+>>>>>>> Stashed changes
               <div>
                 <h3 className="font-bold">Error Loading Products</h3>
                 <p>{error}</p>
@@ -127,6 +144,10 @@ const ProductsPage: React.FC = () => {
           </div>
         )}
 
+<<<<<<< Updated upstream
+=======
+        {/* Main Content */}
+>>>>>>> Stashed changes
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <aside className="md:col-span-1">
             <CategoryFilter
