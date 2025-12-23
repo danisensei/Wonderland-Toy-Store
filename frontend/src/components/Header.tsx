@@ -14,7 +14,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-primary via-pink-500 to-secondary text-white shadow-lg sticky top-0 z-50">
+    <header className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 text-white shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}

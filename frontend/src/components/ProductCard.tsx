@@ -69,8 +69,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
             }}
             className={`p-3 rounded-full backdrop-blur-md transition-all duration-300 ${
               isFavorite
-                ? 'bg-red-500 text-white shadow-glow'
-                : 'bg-white/80 text-primary hover:bg-white'
+                ? 'bg-red-500 text-white shadow-lg'
+                : 'bg-white/80 text-blue-600 hover:bg-white'
             }`}
           >
             <FaHeart className="text-lg" />
@@ -91,9 +91,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
         )}
       </div>
 
-      {/* Product Info */}
-      <div className="flex-1 flex flex-col">
-        <h3 className="font-display font-bold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+        <h3 className="font-display font-bold text-lg mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
           {product.name}
         </h3>
 
