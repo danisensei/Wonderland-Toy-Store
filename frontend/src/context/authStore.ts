@@ -1,14 +1,5 @@
 import { create } from 'zustand';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 import { persist } from 'zustand/middleware';
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 import { authService, User, LoginResponse } from '../services/authService';
 
 export interface AuthStore {
@@ -21,9 +12,6 @@ export interface AuthStore {
   setToken: (token: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, name: string, password: string) => Promise<void>;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
   adminLogin: (email: string, password: string) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
@@ -31,7 +19,7 @@ export interface AuthStore {
   isAdmin: () => boolean;
 }
 
-export const useAuthStore = create<AuthStore>()(
+export const useAuthStore = create<AuthStore>(
   persist(
     (set, get) => ({
       user: null,
@@ -39,45 +27,11 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
-=======
-  logout: () => void;
-  checkAuth: () => Promise<void>;
-  clearError: () => void;
-}
-
-=======
-  logout: () => void;
-  checkAuth: () => Promise<void>;
-  clearError: () => void;
-}
-
->>>>>>> Stashed changes
-=======
-  logout: () => void;
-  checkAuth: () => Promise<void>;
-  clearError: () => void;
-}
-
->>>>>>> Stashed changes
-export const useAuthStore = create<AuthStore>((set, get) => ({
-  user: null,
-  token: localStorage.getItem('authToken'),
-  isAuthenticated: !!localStorage.getItem('authToken'),
-  isLoading: false,
-  error: null,
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
       setUser: (user) => {
         set({ user, isAuthenticated: !!user });
       },
 
-<<<<<<< Updated upstream
       setToken: (token) => {
         if (token) {
           localStorage.setItem('authToken', token);
@@ -100,10 +54,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
             error: null,
           });
         } catch (error: any) {
+          const errorMessage = error.message || 'Login failed';
           set({
+            error: errorMessage,
             isLoading: false,
-            error: error.message || 'Login failed',
-            isAuthenticated: false,
           });
           throw error;
         }
@@ -112,7 +66,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       register: async (email: string, name: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
-          const response: LoginResponse = await authService.register({ email, name, password });
+          const response: LoginResponse = await authService.register({
+            email,
+            name,
+            password,
+          });
           localStorage.setItem('authToken', response.access_token);
           set({
             user: response.user,
@@ -122,10 +80,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
             error: null,
           });
         } catch (error: any) {
+          const errorMessage = error.message || 'Registration failed';
           set({
+            error: errorMessage,
             isLoading: false,
-            error: error.message || 'Registration failed',
-            isAuthenticated: false,
           });
           throw error;
         }
@@ -134,23 +92,35 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       adminLogin: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
-          const response: LoginResponse = await authService.login({ email, password });
-          if (response.user.role !== 'admin') {
-            throw new Error('Access denied. Admin privileges required.');
+          // Admin hardcoded credentials for demo
+          const adminEmail = 'admin@wonderland.com';
+          const adminPassword = 'admin123';
+
+          if (email === adminEmail && password === adminPassword) {
+            const adminUser: User = {
+              id: 'admin-001',
+              name: 'Admin User',
+              email: adminEmail,
+              role: 'admin',
+              createdAt: new Date().toISOString(),
+            };
+            const token = 'admin-token-' + Date.now();
+            localStorage.setItem('authToken', token);
+            set({
+              user: adminUser,
+              token,
+              isAuthenticated: true,
+              isLoading: false,
+              error: null,
+            });
+          } else {
+            throw new Error('Invalid admin credentials');
           }
-          localStorage.setItem('authToken', response.access_token);
-          set({
-            user: response.user,
-            token: response.access_token,
-            isAuthenticated: true,
-            isLoading: false,
-            error: null,
-          });
         } catch (error: any) {
+          const errorMessage = error.message || 'Admin login failed';
           set({
+            error: errorMessage,
             isLoading: false,
-            error: error.message || 'Admin login failed',
-            isAuthenticated: false,
           });
           throw error;
         }
@@ -169,23 +139,26 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       checkAuth: async () => {
         const token = localStorage.getItem('authToken');
         if (!token) {
-          set({ isAuthenticated: false, user: null, token: null });
+          set({ isAuthenticated: false, user: null });
           return;
         }
 
+        set({ isLoading: true });
         try {
           const user = await authService.getCurrentUser();
           set({
             user,
-            isAuthenticated: true,
             token,
+            isAuthenticated: true,
+            isLoading: false,
           });
         } catch (error) {
           localStorage.removeItem('authToken');
           set({
+            isAuthenticated: false,
             user: null,
             token: null,
-            isAuthenticated: false,
+            isLoading: false,
           });
         }
       },
@@ -210,114 +183,3 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   )
 );
 
-=======
-  setToken: (token) => {
-    if (token) {
-      localStorage.setItem('authToken', token);
-    } else {
-      localStorage.removeItem('authToken');
-    }
-    set({ token });
-  },
-
-  login: async (email: string, password: string) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response: LoginResponse = await authService.login({ email, password });
-
-      // Store token
-      localStorage.setItem('authToken', response.access_token);
-
-      // Update state
-      set({
-        user: response.user,
-        token: response.access_token,
-        isAuthenticated: true,
-        isLoading: false,
-        error: null,
-      });
-    } catch (error: any) {
-      set({
-        isLoading: false,
-        error: error.message || 'Login failed',
-        isAuthenticated: false,
-      });
-      throw error;
-    }
-  },
-
-  register: async (email: string, name: string, password: string) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response: LoginResponse = await authService.register({ email, name, password });
-
-      // Store token
-      localStorage.setItem('authToken', response.access_token);
-
-      // Update state
-      set({
-        user: response.user,
-        token: response.access_token,
-        isAuthenticated: true,
-        isLoading: false,
-        error: null,
-      });
-    } catch (error: any) {
-      set({
-        isLoading: false,
-        error: error.message || 'Registration failed',
-        isAuthenticated: false,
-      });
-      throw error;
-    }
-  },
-
-  logout: () => {
-    localStorage.removeItem('authToken');
-    set({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      error: null,
-    });
-  },
-
-  checkAuth: async () => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      set({ isAuthenticated: false, user: null });
-      return;
-    }
-
-    try {
-      const user = await authService.getCurrentUser();
-      set({
-        user,
-        isAuthenticated: true,
-        token,
-      });
-    } catch (error) {
-      // Token is invalid or expired
-      localStorage.removeItem('authToken');
-      set({
-        user: null,
-        token: null,
-        isAuthenticated: false,
-      });
-    }
-  },
-
-  clearError: () => {
-    set({ error: null });
-  },
-}));
-
-// Export User type for convenience
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-export type { User };

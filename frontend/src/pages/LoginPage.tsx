@@ -11,13 +11,14 @@ const LoginPage: React.FC = () => {
   });
   const [error, setError] = useState('');
 
-  const { login, isLoading } = useAuthStore();
+  const { login, adminLogin, isLoading } = useAuthStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setError('');
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +31,14 @@ const LoginPage: React.FC = () => {
     }
 
     try {
+      // Check if trying to login as admin
+      if (formData.email === 'admin@wonderland.com' && formData.password === 'admin123') {
+        await adminLogin(formData.email, formData.password);
+        navigate('/admin');
+        return;
+      }
+
+      // Regular customer login
       await login(formData.email, formData.password);
       navigate('/');
     } catch (err: any) {

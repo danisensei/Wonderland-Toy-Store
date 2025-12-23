@@ -1,100 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { FaSearch, FaSpinner, FaExclamationTriangle } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
-import { Product, productService } from '../services/productService';
+import { useProductStore } from '../context/productStore';
 
 const ProductsPage: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    searchParams.get('category')
-  );
+  const { products } = useProductStore();
+  const [filteredProducts, setFilteredProducts] = useState<typeof products>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState('name');
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-  // Fetch products from API
->>>>>>> Stashed changes
-=======
-  // Fetch products from API
->>>>>>> Stashed changes
-=======
-  // Fetch products from API
->>>>>>> Stashed changes
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await productService.getAllProducts();
-        setProducts(data);
-      } catch (err: any) {
-        console.error('Failed to fetch products:', err);
-        setError(err.message || 'Failed to load products. Please make sure the backend server is running.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  // Update category from URL params
-  useEffect(() => {
-    const categoryParam = searchParams.get('category');
-    if (categoryParam) {
-      setSelectedCategory(categoryParam);
-    }
-  }, [searchParams]);
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
   // Filter and sort products
->>>>>>> Stashed changes
-=======
-  // Filter and sort products
->>>>>>> Stashed changes
-=======
-  // Filter and sort products
->>>>>>> Stashed changes
   useEffect(() => {
-    let filtered = [...products];
+    let filtered = products;
 
+    // Filter by category
     if (selectedCategory) {
-      filtered = filtered.filter((p) => p.category === selectedCategory);
+      filtered = filtered.filter(p => p.category === selectedCategory);
     }
 
-    if (searchQuery.trim()) {
+    // Filter by search query
+    if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
-        (p) =>
+        p =>
           p.name.toLowerCase().includes(query) ||
           p.brand.toLowerCase().includes(query) ||
           p.description.toLowerCase().includes(query)
       );
     }
 
-    switch (sortBy) {
-      case 'price-asc':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-desc':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case 'name':
-      default:
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-    }
+    // Sort
+    filtered = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'price-asc':
+          return a.price - b.price;
+        case 'price-desc':
+          return b.price - a.price;
+        case 'newest':
+          return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+        case 'name':
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
 
     setFilteredProducts(filtered);
   }, [products, selectedCategory, searchQuery, sortBy]);
@@ -102,118 +52,90 @@ const ProductsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-light py-12">
       <div className="container mx-auto px-4">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-4">Shop Our Products</h1>
-          <p className="text-gray-600 text-lg">
-            Explore our amazing collection of toys and games
-          </p>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-dark mb-2">Our Products</h1>
+          <p className="text-gray-600">Discover amazing toys for all ages</p>
         </div>
 
-        <div className="mb-8 space-y-4">
-          <div className="relative">
-            <FaSearch className="absolute left-4 top-3.5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search products by name, brand, or description..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            />
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar - Filters */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-md p-6 sticky top-4">
+              <h2 className="text-xl font-bold mb-6">Filters</h2>
 
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600">
-              Showing {filteredProducts.length} products
-            </span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            >
-              <option value="name">Sort by Name</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-            </select>
-          </div>
-        </div>
+              {/* Search */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Search
+                </label>
+                <div className="relative">
+                  <FaSearch className="absolute left-3 top-3 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        {error && (
-          <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
-            <div className="flex items-center gap-3 text-red-700">
-              <FaExclamationTriangle className="text-2xl flex-shrink-0" />
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-        {/* Error State */}
-        {error && (
-          <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
-            <div className="flex items-center gap-3 text-red-700">
-              <FaExclamationTriangle className="text-2xl" />
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+              {/* Category Filter */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Category
+                </label>
+                <CategoryFilter
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
+                />
+              </div>
+
+              {/* Sort */}
               <div>
-                <h3 className="font-bold">Error Loading Products</h3>
-                <p>{error}</p>
-                <p className="text-sm mt-2">
-                  Make sure the backend is running: <code className="bg-red-100 px-2 py-1 rounded">cd backend && python main.py</code>
-                </p>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Sort By
+                </label>
+                <select
+                  value={sortBy}
+                  onChange={e => setSortBy(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="name">Name (A-Z)</option>
+                  <option value="price-asc">Price (Low to High)</option>
+                  <option value="price-desc">Price (High to Low)</option>
+                  <option value="newest">Newest First</option>
+                </select>
               </div>
             </div>
           </div>
-        )}
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-        {/* Main Content */}
->>>>>>> Stashed changes
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <aside className="md:col-span-1">
-            <CategoryFilter
-              selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
-            />
-          </aside>
+          {/* Main Content - Products Grid */}
+          <div className="lg:col-span-3">
+            {/* Results info */}
+            <div className="mb-6 flex items-center justify-between">
+              <p className="text-gray-600">
+                Showing <span className="font-bold">{filteredProducts.length}</span> products
+              </p>
+            </div>
 
-          <main className="md:col-span-3">
-            {loading ? (
-              <div className="flex flex-col justify-center items-center h-96">
-                <FaSpinner className="text-4xl text-primary animate-spin mb-4" />
-                <p className="text-gray-600">Loading products...</p>
-              </div>
-            ) : filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                  />
+            {/* Products Grid */}
+            {filteredProducts.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredProducts.map(product => (
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (
-              <div className="card text-center py-12">
-                <p className="text-2xl text-gray-500 mb-4">No products found</p>
-                <p className="text-gray-400">
-                  Try adjusting your search or filter criteria
+              <div className="text-center py-12">
+                <p className="text-xl text-gray-600 mb-4">No products found</p>
+                <p className="text-gray-500">
+                  {searchQuery ? 'Try adjusting your search query' : 'Try selecting a different category'}
                 </p>
               </div>
             )}
-          </main>
+          </div>
         </div>
       </div>
     </div>
@@ -221,3 +143,4 @@ const ProductsPage: React.FC = () => {
 };
 
 export default ProductsPage;
+

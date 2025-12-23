@@ -11,18 +11,7 @@ const OrdersPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(null);
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
   // Fetch orders from API
->>>>>>> Stashed changes
-=======
-  // Fetch orders from API
->>>>>>> Stashed changes
-=======
-  // Fetch orders from API
->>>>>>> Stashed changes
   useEffect(() => {
     const fetchOrders = async () => {
       if (!isAuthenticated) {
@@ -53,10 +42,12 @@ const OrdersPage: React.FC = () => {
 
     setCancellingOrderId(orderId);
     try {
-      const updatedOrder = await orderService.cancelOrder(orderId);
-      setOrders(orders.map(o => o.id === orderId ? updatedOrder : o));
+      await orderService.cancelOrder(orderId);
+      setOrders(orders.map(order =>
+        order.id === orderId ? { ...order, status: 'cancelled' } : order
+      ));
     } catch (err: any) {
-      alert(err.message || 'Failed to cancel order');
+      alert(`Failed to cancel order: ${err.message}`);
     } finally {
       setCancellingOrderId(null);
     }
@@ -64,53 +55,35 @@ const OrdersPage: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-<<<<<<< Updated upstream
-      case 'pending': return <FaClock className="text-yellow-500" />;
-      case 'processing': return <FaBox className="text-blue-500" />;
-      case 'shipped': return <FaTruck className="text-orange-500" />;
-      case 'delivered': return <FaCheckCircle className="text-green-500" />;
-      case 'cancelled': return <FaTimesCircle className="text-red-500" />;
-      default: return null;
-=======
       case 'pending':
         return <FaClock className="text-yellow-500" />;
       case 'processing':
-        return <FaBox className="text-blue-500" />;
+        return <FaSpinner className="text-blue-500 animate-spin" />;
       case 'shipped':
-        return <FaTruck className="text-orange-500" />;
+        return <FaTruck className="text-blue-600" />;
       case 'delivered':
         return <FaCheckCircle className="text-green-500" />;
       case 'cancelled':
         return <FaTimesCircle className="text-red-500" />;
       default:
-        return null;
->>>>>>> Stashed changes
+        return <FaBox />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-<<<<<<< Updated upstream
-      case 'pending': return 'bg-yellow-100 text-yellow-700';
-      case 'processing': return 'bg-blue-100 text-blue-700';
-      case 'shipped': return 'bg-orange-100 text-orange-700';
-      case 'delivered': return 'bg-green-100 text-green-700';
-      case 'cancelled': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
-=======
       case 'pending':
-        return 'bg-yellow-100 text-yellow-700';
+        return 'bg-yellow-100 text-yellow-800';
       case 'processing':
-        return 'bg-blue-100 text-blue-700';
+        return 'bg-blue-100 text-blue-800';
       case 'shipped':
-        return 'bg-orange-100 text-orange-700';
+        return 'bg-blue-100 text-blue-800';
       case 'delivered':
-        return 'bg-green-100 text-green-700';
+        return 'bg-green-100 text-green-800';
       case 'cancelled':
-        return 'bg-red-100 text-red-700';
+        return 'bg-red-100 text-red-800';
       default:
-        return 'bg-gray-100 text-gray-700';
->>>>>>> Stashed changes
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -121,23 +94,21 @@ const OrdersPage: React.FC = () => {
           <div className="card text-center py-16 max-w-md mx-auto">
             <p className="text-4xl mb-4">🔐</p>
             <h2 className="text-2xl font-bold mb-4">Login Required</h2>
-<<<<<<< Updated upstream
             <p className="text-gray-600 mb-6">Please login to view your orders.</p>
             <Link to="/login" className="btn btn-primary">Login</Link>
-=======
-            <p className="text-gray-600 mb-6">
-              Please login to view your orders.
-            </p>
-            <Link to="/login" className="btn btn-primary">
-              Login
-            </Link>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-light py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col justify-center items-center h-64">
+            <FaSpinner className="text-4xl text-primary animate-spin mb-4" />
+            <p className="text-gray-600">Loading orders...</p>
           </div>
         </div>
       </div>
@@ -149,225 +120,68 @@ const OrdersPage: React.FC = () => {
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold mb-8">My Orders</h1>
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
         {error && (
-          <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
-            <div className="flex items-center gap-3 text-red-700">
-              <FaExclamationTriangle className="text-2xl flex-shrink-0" />
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-        {/* Error State */}
-        {error && (
-          <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
-            <div className="flex items-center gap-3 text-red-700">
-              <FaExclamationTriangle className="text-2xl" />
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-              <div>
-                <h3 className="font-bold">Error Loading Orders</h3>
-                <p>{error}</p>
-              </div>
-            </div>
+          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <FaExclamationTriangle className="inline mr-2" />
+            {error}
           </div>
         )}
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-        {/* Loading State */}
->>>>>>> Stashed changes
-=======
-        {/* Loading State */}
->>>>>>> Stashed changes
-=======
-        {/* Loading State */}
->>>>>>> Stashed changes
-        {loading ? (
-          <div className="flex flex-col justify-center items-center h-64">
-            <FaSpinner className="text-4xl text-primary animate-spin mb-4" />
-            <p className="text-gray-600">Loading orders...</p>
-          </div>
-        ) : orders.length === 0 ? (
+        {orders.length === 0 ? (
           <div className="card text-center py-16 max-w-md mx-auto">
             <p className="text-4xl mb-4">📦</p>
             <h2 className="text-2xl font-bold mb-4">No Orders Yet</h2>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-            <p className="text-gray-600 mb-6">You haven't placed any orders yet. Start shopping!</p>
-            <Link to="/products" className="btn btn-primary">Shop Now</Link>
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-            <p className="text-gray-600 mb-6">
-              You haven't placed any orders yet. Start shopping!
-            </p>
-            <Link to="/products" className="btn btn-primary">
-              Shop Now
-            </Link>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+            <p className="text-gray-600 mb-6">You haven't placed any orders yet.</p>
+            <Link to="/products" className="btn btn-primary">Continue Shopping</Link>
           </div>
         ) : (
           <div className="space-y-6">
-            {orders.map((order) => (
+            {orders.map(order => (
               <div key={order.id} className="card">
-                <div className="flex justify-between items-start mb-4 pb-4 border-b border-gray-200">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4 pb-4 border-b">
                   <div>
-                    <h3 className="text-lg font-bold">{order.orderNumber}</h3>
+                    <h3 className="text-lg font-bold">Order #{order.orderNumber}</h3>
                     <p className="text-gray-600 text-sm">
-                      Ordered on {new Date(order.createdAt).toLocaleDateString()}
+                      {new Date(order.createdAt).toLocaleDateString()}
                     </p>
                   </div>
-                  <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${getStatusColor(order.status)}`}>
+                  <div className="flex items-center gap-2">
                     {getStatusIcon(order.status)}
-                    <span className="capitalize font-semibold">{order.status}</span>
+                    <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(order.status)}`}>
+                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                    </span>
                   </div>
                 </div>
 
                 <div className="mb-4">
-                  <h4 className="font-semibold mb-3">Items:</h4>
+                  <h4 className="font-semibold text-gray-700 mb-2">Items:</h4>
                   <div className="space-y-2">
-<<<<<<< Updated upstream
-                    {order.items.map((item, index) => (
-                      <div key={item.id || index} className="flex justify-between text-sm">
-=======
-                    {order.items.map((item) => (
-                      <div key={item.id || item.productId} className="flex justify-between text-sm">
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-                        <span>{item.name || `Product #${item.productId}`} x {item.quantity}</span>
-                        <span className="font-semibold">
-                          PKR {(item.price * item.quantity).toLocaleString('en-PK', { maximumFractionDigits: 0 })}
-                        </span>
+                    {order.items.map((item, idx) => (
+                      <div key={idx} className="flex justify-between text-gray-600">
+                        <span>{item.name} × {item.quantity}</span>
+                        <span>PKR {(item.price * item.quantity).toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-                {/* Delivery Address */}
->>>>>>> Stashed changes
-=======
-                {/* Delivery Address */}
->>>>>>> Stashed changes
-=======
-                {/* Delivery Address */}
->>>>>>> Stashed changes
-                {order.deliveryAddress && (
-                  <div className="mb-4 text-sm text-gray-600">
-                    <span className="font-semibold">Delivery: </span>
-                    {order.deliveryAddress}
-                    {order.city && `, ${order.city}`}
-                    {order.postalCode && ` ${order.postalCode}`}
-                  </div>
-                )}
+                <div className="mb-4 pb-4 border-b">
+                  <p className="text-gray-600 mb-1"><strong>Delivery Address:</strong> {order.deliveryAddress}</p>
+                  {order.city && <p className="text-gray-600">{order.city} {order.postalCode}</p>}
+                </div>
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-                {/* Order Total & Actions */}
->>>>>>> Stashed changes
-=======
-                {/* Order Total & Actions */}
->>>>>>> Stashed changes
-=======
-                {/* Order Total & Actions */}
->>>>>>> Stashed changes
-                <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+                <div className="flex justify-between items-center">
                   <div>
-                    <span className="font-bold">Total: </span>
-                    <span className="text-xl font-bold text-primary">
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                      PKR {order.totalAmount.toLocaleString('en-PK', { maximumFractionDigits: 0 })}
-                    </span>
+                    <p className="text-gray-600">Total Amount</p>
+                    <p className="text-2xl font-bold text-primary">PKR {order.totalAmount.toLocaleString()}</p>
                   </div>
-
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-                      ${order.totalAmount.toFixed(2)}
-                    </span>
-                  </div>
-
-                  {/* Cancel button for pending/processing orders */}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
                   {(order.status === 'pending' || order.status === 'processing') && (
                     <button
                       onClick={() => handleCancelOrder(order.id)}
                       disabled={cancellingOrderId === order.id}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                      className="flex items-center gap-2 px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 disabled:opacity-50 transition"
-=======
-                      className="btn btn-outline text-red-500 border-red-500 hover:bg-red-50 disabled:opacity-50"
->>>>>>> Stashed changes
-=======
-                      className="btn btn-outline text-red-500 border-red-500 hover:bg-red-50 disabled:opacity-50"
->>>>>>> Stashed changes
-=======
-                      className="btn btn-outline text-red-500 border-red-500 hover:bg-red-50 disabled:opacity-50"
->>>>>>> Stashed changes
+                      className="btn btn-outline"
                     >
-                      {cancellingOrderId === order.id ? (
-                        <FaSpinner className="animate-spin" />
-                      ) : (
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                        <FaTimesCircle />
-                      )}
-                      Cancel Order
-=======
-                        'Cancel Order'
-                      )}
->>>>>>> Stashed changes
-=======
-                        'Cancel Order'
-                      )}
->>>>>>> Stashed changes
-=======
-                        'Cancel Order'
-                      )}
->>>>>>> Stashed changes
+                      {cancellingOrderId === order.id ? 'Cancelling...' : 'Cancel Order'}
                     </button>
                   )}
                 </div>
@@ -381,3 +195,4 @@ const OrdersPage: React.FC = () => {
 };
 
 export default OrdersPage;
+
